@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::get('/test', function () {
+
+    $question = new Question();
+    $question->question_text = "test";
+    $question->save();
+    return 'coucou';
+});
+
+Route::get('/question/{question}', function (Question $question) {
+    return $question->question_text;
 });
