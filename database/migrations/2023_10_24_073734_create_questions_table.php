@@ -21,6 +21,14 @@ return new class extends Migration
             $table->string('false_proposition2');
             $table->string('false_proposition3');
         });
+
+        Schema::create('quizzes', function(Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->softDeletes();
+            $table->string('name');
+            $table->string('short_name');
+        });
     }
 
     /**

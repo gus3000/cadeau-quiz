@@ -21,6 +21,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereQuestionText($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereUpdatedAt($value)
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string $answer
+ * @property string $false_proposition1
+ * @property string $false_proposition2
+ * @property string $false_proposition3
+ * @method static \Illuminate\Database\Eloquent\Builder|Question onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereAnswer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereFalseProposition1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereFalseProposition2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereFalseProposition3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Question withoutTrashed()
  * @mixin \Eloquent
  */
 class Question extends Model
