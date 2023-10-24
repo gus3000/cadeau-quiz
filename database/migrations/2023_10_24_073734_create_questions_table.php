@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Quiz;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('question_text');
+            $table->foreignIdFor(Quiz::class);
+            $table->string('text');
             $table->string('answer');
             $table->string('false_proposition1');
             $table->string('false_proposition2');

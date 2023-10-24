@@ -17,7 +17,7 @@ class QuestionFactory extends Factory
     public function definition(): array
     {
         return [
-            'question_text' => fake()->text(),
+            'text' => fake()->text(),
             'answer' => fake()->text(20),
             'false_proposition1' => fake()->text(20),
             'false_proposition2' => fake()->text(20),

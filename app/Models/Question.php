@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string $question_text
+ * @property string $text
  * @method static \Database\Factories\QuestionFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Question newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Question newQuery()
@@ -34,6 +34,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereFalseProposition3($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Question withoutTrashed()
+ * @property int $quiz_id
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereQuizId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereText($value)
  * @mixin \Eloquent
  */
 class Question extends Model

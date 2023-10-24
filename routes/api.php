@@ -22,11 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/test', function () {
 
     $question = new Question();
-    $question->question_text = "test";
+    $question->text = "test";
     $question->save();
     return 'coucou';
 });
 
 Route::get('/question/{question}', function (Question $question) {
-    return $question->question_text;
+    return $question->text;
 });

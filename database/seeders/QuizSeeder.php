@@ -16,7 +16,7 @@ class QuizSeeder extends Seeder
     {
 //        Question::factory(5)->create();
 //        Question::factory()->create([
-//            'question_text' => 'this is a question text'
+//            'text' => 'this is a question text'
 //        ]);
 
         $quiz = Quiz::factory()->create([
@@ -27,13 +27,17 @@ class QuizSeeder extends Seeder
         $this->importCsv($quiz);
     }
 
-    private function importCsv(Quiz $quiz):void {
+    private function importCsv(Quiz $quiz): void
+    {
         $shortName = $quiz->short_name;
-        $csvFile = fopen(base_path("database/data/questions/$shortName.csv"), "r");
+        $csv = array_map("str_getcsv", file("database/data/questions/$shortName.csv",FILE_SKIP_EMPTY_LINES));
+        $keys = array_shift($csv);
 
-        $firstLine = true;
-        
-
-        fclose($csvFile);
+        foreach($csv as $i => $row) {
+            $question = array_combine($keys,$row);
+            $question['quiz_id'] = $quiz->id;
+            dump($question);
+            Question::create($question);
+        }
     }
 }

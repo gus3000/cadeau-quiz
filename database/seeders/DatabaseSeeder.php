@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
 
 //        Question::factory(5)->create();
 //        Question::factory()->create([
-//            'question_text' => 'this is a question text'
+//            'text' => 'this is a question text'
 //        ]);
     }
 }
