@@ -2,19 +2,16 @@
 
 namespace App\Console\Commands;
 
-use Database\Seeders\QuizSeeder;
-use Database\Seeders\UserSeeder;
 use Illuminate\Console\Command;
 
-class Seed extends Command
+class Rebuild extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:seed';
-
+    protected $signature = 'app:rebuild';
 
     /**
      * The console command description.
@@ -28,10 +25,8 @@ class Seed extends Command
      */
     public function handle()
     {
-        foreach ([QuizSeeder::class, UserSeeder::class] as $seederClass) {
-            $this->info("Seeding from {$seederClass}");
-            $this->callSilently('db:seed', ['--class' => $seederClass, '--no-interaction' => true]);
-        }
-
+        $this->call("migrate:fresh");
+        $this->call("app:seed");
+        $this->call("ide-helper:models", ["--write" => true]);
     }
 }

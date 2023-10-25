@@ -9,11 +9,18 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-//        $user = new User();
         User::factory()->create([
-            'name' => 'gus3000',
-            'email' => 'gus3000spam@gmail.com',
+            'name' => 'admin',
+            'email' => 'root@chateau.education',
             'password' => 'azerty',
+            'admin' => true
+        ]);
+
+        User::factory()->create([
+            'name' => 'castless',
+            'email' => 'cast@troll.fr',
+            'password' => 'qwerty',
+            'admin' => false
         ]);
     }
 }

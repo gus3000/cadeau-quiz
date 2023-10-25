@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,22 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/auth/twitch', function () {
+    return Socialite::driver('twitch')->stateless()->redirect();
+});
+Route::get('/auth/twitch/callback', function () {
+    $twitchUser = Socialite::driver('twitch')->stateless()->user();
+
+    $user = \App\Models\User::updateOrCreate([
+        'email' => $twitchUser->getEmail(),
+    ], [
+        'name' => $twitchUser->getName(),
+    ]);
+
+
+    return $user;
+});
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -35,4 +52,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

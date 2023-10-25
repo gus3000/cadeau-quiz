@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -15,6 +16,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property string $name
  * @property string $short_name
+ * @property string|null $opened_date
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Question> $questions
+ * @property-read int|null $questions_count
  * @method static \Database\Factories\QuizFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz newQuery()
@@ -24,6 +28,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereOpenedDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereShortName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz withTrashed()
@@ -34,4 +39,18 @@ class Quiz extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+
+    public function open(): void {
+        $this->opened_date = \Date::now();
+    }
+
+    public function close(): void {
+        $this->opened_date = null;
+    }
+
+    public function questions(): HasMany
+    {
+        return $this->hasMany(Question::class);
+    }
 }

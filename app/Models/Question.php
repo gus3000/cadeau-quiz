@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -39,12 +40,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereText($value)
  * @property-read array $answers
  * @property-read array $answers_in_random_order
+ * @property-read \App\Models\Quiz $quiz
  * @mixin \Eloquent
  */
 class Question extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function quiz(): BelongsTo {
+        return $this->belongsTo(Quiz::class);
+    }
 
     public function getAnswersAttribute(): array {
         return [
