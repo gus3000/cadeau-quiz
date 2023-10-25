@@ -37,10 +37,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $quiz_id
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereQuizId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereText($value)
+ * @property-read array $answers
+ * @property-read array $answers_in_random_order
  * @mixin \Eloquent
  */
 class Question extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function getAnswersAttribute(): array {
+        return [
+            $this->answer,
+            $this->false_proposition1,
+            $this->false_proposition2,
+            $this->false_proposition3,
+        ];
+    }
+
+    public function getAnswersInRandomOrderAttribute(): array {
+        $answers = $this->answers;
+        shuffle($answers);
+        return $answers;
+    }
 }

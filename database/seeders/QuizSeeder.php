@@ -36,7 +36,6 @@ class QuizSeeder extends Seeder
         foreach($csv as $i => $row) {
             $question = array_combine($keys,$row);
             $question['quiz_id'] = $quiz->id;
-            dump($question);
             Question::create($question);
         }
     }
