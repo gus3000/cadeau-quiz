@@ -20,26 +20,9 @@ use Laravel\Socialite\Facades\Socialite;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
-
-Route::get('/auth/twitch', function () {
-    return Socialite::driver('twitch')->stateless()->redirect();
-});
-Route::get('/auth/twitch/callback', function () {
-    $twitchUser = Socialite::driver('twitch')->stateless()->user();
-
-    $user = \App\Models\User::updateOrCreate([
-        'email' => $twitchUser->getEmail(),
-    ], [
-        'name' => $twitchUser->getName(),
-    ]);
-
-
-    return $user;
 });
 
 Route::get('/dashboard', function () {
