@@ -1,8 +1,13 @@
 import type {TAnswer} from "@/Model/TAnswer";
+import type {TQuiz} from "@/Model/TQuiz";
 
 export interface TQuestion {
     id: int,
-    name: string,
+    created_at: Date,
+    updated_at: Date,
+    deleted_at: ?Date,
+    quiz: TQuiz,
     text: string,
+    finished: boolean,
     answers: Array[TAnswer],
 }

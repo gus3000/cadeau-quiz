@@ -1,9 +1,14 @@
 <script lang="ts" setup>
 import type {PropType} from "vue";
 import type {TQuestion} from "@/Model/TQuestion";
+import {router} from "@inertiajs/vue3";
+import type {TAnswer} from "@/Model/TAnswer";
+import axios from "axios";
 
-function selectAnswer(answer) {
-    console.log("selected : ", answer);
+function selectAnswer(question: TQuestion, answer: TAnswer) {
+    const url = `/api/user/guess/${question.id}/${answer.id}`;
+    axios.put(url);
+    // router.put();
 }
 
 defineProps({question: Object as PropType<TQuestion>})
@@ -19,7 +24,7 @@ defineProps({question: Object as PropType<TQuestion>})
                 class="answer"
                 type="radio"
                 name="{{question.id}}"
-                @change="selectAnswer(answer)"
+                @change="selectAnswer(question,answer)"
             />
             {{ answer.text }}
         </label>

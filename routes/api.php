@@ -64,6 +64,5 @@ Route::prefix('user')
 
         Route::get('/guess/{question}', [GuessController::class, 'getGuess']);
 
-        //TODO change to PUT
-        Route::get('/guess/{question}/{answer}', [GuessController::class, 'updateGuess']);
+        Route::put('/guess/{question}/{answer}', [GuessController::class, 'updateGuess']);
     });
