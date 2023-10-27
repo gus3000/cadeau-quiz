@@ -41,14 +41,16 @@ Route::middleware(['auth'])
     ->prefix('quiz')
     ->group(function() {
     Route::get('/', function() {
-        return Inertia::render('Quiz');
+        $quiz = \App\Models\Quiz::currentlyOpen();
+        foreach($quiz->questions as $question) {
+            foreach($question->answers as $answer) {
+                $answer->label;
+            }
+        }
+        return Inertia::render('Quiz', [
+            'quiz' => $quiz
+        ]);
     });
 });
-
-//Route::middleware('auth')->group(function () {
-//    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-//});
 
 require __DIR__ . '/auth.php';

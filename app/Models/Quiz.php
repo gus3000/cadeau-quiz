@@ -14,9 +14,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int $created_by
  * @property string $name
  * @property string $short_name
  * @property string|null $opened_at
+ * @property int $finished
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Question> $questions
  * @property-read int|null $questions_count
  * @method static \Database\Factories\QuizFactory factory($count = null, $state = [])
@@ -25,19 +27,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz query()
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereCreatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereFinished($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereOpenedDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereOpenedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereShortName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz withoutTrashed()
- * @property int $created_by
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereCreatedBy($value)
- * @property int $finished
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereFinished($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereOpenedAt($value)
  * @mixin \Eloquent
  */
 class Quiz extends Model

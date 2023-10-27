@@ -59,7 +59,7 @@ class QuizSeeder extends Seeder
             foreach ($answers as $answer) {
                 Answer::create([
                     'question_id' => $question->id,
-                    'label' => $answer,
+                    'text' => $answer,
                     'correct' => $answer === $correct_answer
                 ]);
             }

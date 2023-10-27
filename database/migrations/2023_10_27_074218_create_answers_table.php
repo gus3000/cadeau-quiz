@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignIdFor(\App\Models\Question::class)->constrained();
-            $table->string('label');
+            $table->string('text');
             $table->boolean('correct');
         });
     }
