@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\GuessController;
+use App\Models\Answer;
+use App\Models\Guess;
 use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
@@ -17,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('quiz')->group(function () {
+    Route::get('/current', function() {
+       return Quiz::currentlyOpen();
+    });
+
     Route::get('/{quiz}', function (Quiz $quiz) {
         return $quiz;
     });
@@ -43,13 +50,20 @@ Route::prefix('question')->group(function () {
 });
 
 Route::prefix('user')
-    ->middleware(['web','auth:sanctum'])
+    ->middleware(['web', 'auth:sanctum'])
     ->group(function () {
         Route::get('/', function (Request $request) {
             return $request->user();
         });
 
-    Route::get('/history', function () {
-        return ['coucou'];
+        Route::get('/history', function () {
+            $user = Auth::user();
+            $guesses = Guess::where(['user_id' => $user->id]);
+            return $guesses->get();
+        });
+
+        Route::get('/guess/{question}', [GuessController::class, 'getGuess']);
+
+        //TODO change to PUT
+        Route::get('/guess/{question}/{answer}', [GuessController::class, 'updateGuess']);
     });
-});

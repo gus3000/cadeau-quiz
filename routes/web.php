@@ -22,7 +22,7 @@ Route::get('/phpinfo', function () {
 });
 
 Route::get('/', function () {
-    if(Auth::check()) {
+    if (Auth::check()) {
         return redirect('dashboard');
     }
     return Inertia::render('Welcome', [
@@ -30,11 +30,20 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-})->name('home');
+})
+    ->name('home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'quiz_redirect'])->name('dashboard');
+
+Route::middleware(['auth'])
+    ->prefix('quiz')
+    ->group(function() {
+    Route::get('/', function() {
+        return Inertia::render('Quiz');
+    });
+});
 
 //Route::middleware('auth')->group(function () {
 //    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

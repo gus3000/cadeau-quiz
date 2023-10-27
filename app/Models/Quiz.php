@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property string $name
  * @property string $short_name
- * @property string|null $opened_date
+ * @property string|null $opened_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Question> $questions
  * @property-read int|null $questions_count
  * @method static \Database\Factories\QuizFactory factory($count = null, $state = [])
@@ -37,6 +37,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereCreatedBy($value)
  * @property int $finished
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereFinished($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereOpenedAt($value)
  * @mixin \Eloquent
  */
 class Quiz extends Model
@@ -44,13 +45,20 @@ class Quiz extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public static function currentlyOpen(): ?Quiz
+    {
+        return self::whereFinished(false)
+            ->orderByDesc('opened_at')
+            ->first();
+    }
 
     public function open(): void {
-        $this->opened_date = \Date::now();
+        $this->opened_at = \Date::now();
+        $this->finished = false;
     }
 
     public function close(): void {
-        $this->opened_date = null;
+        $this->finished = true;
     }
 
     public function questions(): HasMany

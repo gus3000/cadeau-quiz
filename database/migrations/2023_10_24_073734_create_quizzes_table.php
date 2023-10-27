@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class, 'created_by')->constrained('users','id');
             $table->string('name');
             $table->string('short_name');
-            $table->date('opened_date')->nullable();
+            $table->date('opened_at')->nullable();
             $table->boolean('finished')->default(false);
         });
     }

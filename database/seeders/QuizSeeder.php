@@ -23,6 +23,15 @@ class QuizSeeder extends Seeder
         ]);
 
         $this->importCsv($quiz);
+
+        $quiz = Quiz::factory()->create([
+            'name' => 'Ennemis de JV',
+            'short_name' => 'ennemis_jv',
+            'created_by' => $user->id,
+            'finished' => false,
+        ]);
+
+        $this->importCsv($quiz);
     }
 
     private function importCsv(Quiz $quiz): void
@@ -34,7 +43,7 @@ class QuizSeeder extends Seeder
         foreach ($csv as $index => $row) {
             $questionData = array_combine($keys, $row);
             $questionData['quiz_id'] = $quiz->id;
-            $questionData['finished'] = true;
+            $questionData['finished'] = $quiz->finished;
 
             $correct_answer = $questionData['answer'];
             $answers = [
