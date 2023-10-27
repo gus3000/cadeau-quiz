@@ -33,6 +33,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz withoutTrashed()
+ * @property int $created_by
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereCreatedBy($value)
+ * @property int $finished
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereFinished($value)
  * @mixin \Eloquent
  */
 class Quiz extends Model

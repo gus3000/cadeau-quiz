@@ -18,10 +18,11 @@ return new class extends Migration
             $table->softDeletes();
             $table->foreignIdFor(Quiz::class)->constrained();
             $table->string('text');
-            $table->string('answer');
-            $table->string('false_proposition1');
-            $table->string('false_proposition2');
-            $table->string('false_proposition3');
+//            $table->string('answer');
+//            $table->string('false_proposition1');
+//            $table->string('false_proposition2');
+//            $table->string('false_proposition3');
+            $table->boolean('finished')->default(false);
         });
     }
 

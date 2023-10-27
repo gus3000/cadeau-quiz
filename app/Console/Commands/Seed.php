@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Database\Seeders\GuessSeeder;
 use Database\Seeders\QuizSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Console\Command;
@@ -28,7 +29,11 @@ class Seed extends Command
      */
     public function handle()
     {
-        foreach ([QuizSeeder::class, UserSeeder::class] as $seederClass) {
+        foreach ([
+                     UserSeeder::class,
+                     QuizSeeder::class,
+                     GuessSeeder::class,
+                 ] as $seederClass) {
             $this->info("Seeding from {$seederClass}");
             $this->callSilently('db:seed', ['--class' => $seederClass, '--no-interaction' => true]);
         }

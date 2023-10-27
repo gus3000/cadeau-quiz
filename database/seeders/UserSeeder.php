@@ -12,14 +12,12 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'admin',
             'email' => 'root@chateau.education',
-            'password' => 'azerty',
             'admin' => true
         ]);
 
         User::factory()->create([
             'name' => 'castless',
-            'email' => 'cast@troll.fr',
-            'password' => 'qwerty',
+            'email' => 'gus3000spam@gmail.com',
             'admin' => false
         ]);
     }

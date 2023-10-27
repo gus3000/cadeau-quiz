@@ -1,6 +1,8 @@
 <?php
 
-use App\Models\Quiz;
+use App\Models\Answer;
+use App\Models\Guess;
+use App\Models\Question;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,15 +15,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('quizzes', function(Blueprint $table) {
+        Schema::create('guesses', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->softDeletes();
-            $table->foreignIdFor(User::class, 'created_by')->constrained('users','id');
-            $table->string('name');
-            $table->string('short_name');
-            $table->date('opened_date')->nullable();
-            $table->boolean('finished')->default(false);
+            $table->foreignIdFor(Question::class)->constrained();
+            $table->foreignIdFor(Answer::class)->constrained();
+            $table->foreignIdFor(User::class)->constrained();
+
+            $table->unique(['user_id', 'question_id']);
         });
     }
 
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('quizzes');
+        Schema::dropIfExists('guesses');
     }
 };

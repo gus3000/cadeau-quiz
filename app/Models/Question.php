@@ -41,6 +41,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read array $answers
  * @property-read array $answers_in_random_order
  * @property-read \App\Models\Quiz $quiz
+ * @property int $finished
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereFinished($value)
  * @mixin \Eloquent
  */
 class Question extends Model
