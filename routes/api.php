@@ -16,28 +16,40 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('quiz')->group(function () {
+    Route::get('/{quiz}', function (Quiz $quiz) {
+        return $quiz;
+    });
+
+    Route::get('/{quiz}/questions', function (Quiz $quiz) {
+        return $quiz->questions;
+    });
+
+    Route::get('/{quiz}/open', function (Quiz $quiz) {
+        $quiz->open();
+        return $quiz;
+    });
+
+    Route::get('/{quiz}/close', function (Quiz $quiz) {
+        $quiz->close();
+        return $quiz;
+    });
 });
 
-Route::get('/quiz/{quiz}', function (Quiz $quiz) {
-    return $quiz;
+Route::prefix('question')->group(function () {
+    Route::get('/{question}/quiz', function (Question $question) {
+        return $question->quiz;
+    });
 });
 
-Route::get('/quiz/{quiz}/questions', function (Quiz $quiz) {
-    return $quiz->questions;
-});
+Route::prefix('user')
+    ->middleware(['web','auth:sanctum'])
+    ->group(function () {
+        Route::get('/', function (Request $request) {
+            return $request->user();
+        });
 
-Route::get('/quiz/{quiz}/open', function (Quiz $quiz) {
-    $quiz->open();
-    return $quiz;
-});
-
-Route::get('/quiz/{quiz}/close', function (Quiz $quiz) {
-    $quiz->close();
-    return $quiz;
-});
-
-Route::get('/question/{question}/quiz', function (Question $question) {
-    return $question->quiz;
+    Route::get('/history', function () {
+        return ['coucou'];
+    });
 });
