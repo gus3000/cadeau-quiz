@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head} from '@inertiajs/vue3';
+import {Head, router} from '@inertiajs/vue3';
 import type {TQuiz} from "@/Model/TQuiz.d.ts";
 import type {PropType} from "vue";
 import QuizQuestion from "@/Components/QuizQuestion.vue";
@@ -9,6 +9,7 @@ import type {TQuestion} from "@/Model/TQuestion";
 Echo.private('quiz.2') //FIXME
     .listen('NextQuestion', (e) => {
         console.log("NEXT QUESTION", e);
+        router.reload({only: ['question']})
     })
 
 defineProps({

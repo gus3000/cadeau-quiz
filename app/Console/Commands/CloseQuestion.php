@@ -33,6 +33,7 @@ class CloseQuestion extends Command
             $this->info('No question id given, closing current question...');
             $quiz = Quiz::currentlyOpen();
             $currentQuestion = $quiz->current_question;
+            $this->info("Chose question {$currentQuestion->id} from quiz {$quiz->id}");
             $currentQuestion->finished = true;
             $currentQuestion->save();
 
