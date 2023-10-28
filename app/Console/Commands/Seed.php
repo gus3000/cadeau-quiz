@@ -22,7 +22,7 @@ class Seed extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Executes all available seeders';
 
     /**
      * Execute the console command.

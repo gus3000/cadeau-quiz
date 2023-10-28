@@ -42,13 +42,15 @@ Route::middleware(['auth'])
     ->group(function() {
     Route::get('/', function() {
         $quiz = \App\Models\Quiz::currentlyOpen();
-        foreach($quiz->questions as $question) {
-            foreach($question->answers as $answer) {
-                $answer->label;
-            }
-        }
+        $question = $quiz->currentQuestion;
+//        foreach($quiz->questions as $question) {
+//            foreach($question->answers as $answer) {
+//                $answer->label;
+//            }
+//        }
         return Inertia::render('Quiz', [
-            'quiz' => $quiz
+            'quiz' => $quiz,
+            'question' => $question
         ]);
     });
 });

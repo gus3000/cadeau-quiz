@@ -19,6 +19,7 @@ class QuizSeeder extends Seeder
             'name' => 'Ennemis de JV',
             'short_name' => 'ennemis_jv',
             'created_by' => $user->id,
+            'opened_at' => new \DateTime(),
             'finished' => true,
         ]);
 
@@ -28,6 +29,7 @@ class QuizSeeder extends Seeder
             'name' => 'Ennemis de JV',
             'short_name' => 'ennemis_jv',
             'created_by' => $user->id,
+            'opened_at' => new \DateTime(),
             'finished' => false,
         ]);
 

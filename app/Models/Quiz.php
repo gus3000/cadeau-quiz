@@ -14,11 +14,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string|null $opened_at
  * @property int $created_by
  * @property string $name
  * @property string $short_name
- * @property string|null $opened_at
  * @property int $finished
+ * @property-read \App\Models\Question|null $current_question
+ * @property-read mixed $is_open
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Question> $questions
  * @property-read int|null $questions_count
  * @method static \Database\Factories\QuizFactory factory($count = null, $state = [])
@@ -51,12 +53,29 @@ class Quiz extends Model
             ->first();
     }
 
-    public function open(): void {
+    public function getIsOpenAttribute()
+    {
+        return $this->opened_at !== null && !$this->finished;
+    }
+
+    public function getCurrentQuestionAttribute(): ?Question
+    {
+        return Question::where([
+            'quiz_id' => $this->id,
+            'finished' => false,
+        ])->orderBy('id')
+            ->first()
+            ->load('answers');
+    }
+
+    public function open(): void
+    {
         $this->opened_at = \Date::now();
         $this->finished = false;
     }
 
-    public function close(): void {
+    public function close(): void
+    {
         $this->finished = true;
     }
 

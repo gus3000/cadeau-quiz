@@ -4,8 +4,17 @@ import {Head} from '@inertiajs/vue3';
 import type {TQuiz} from "@/Model/TQuiz.d.ts";
 import type {PropType} from "vue";
 import QuizQuestion from "@/Components/QuizQuestion.vue";
+import type {TQuestion} from "@/Model/TQuestion";
 
-defineProps({quiz: Object as PropType<TQuiz>})
+Echo.private('quiz.2') //FIXME
+    .listen('NextQuestion', (e) => {
+        console.log("NEXT QUESTION", e);
+    })
+
+defineProps({
+    quiz: Object as PropType<TQuiz>,
+    question: Object as PropType<TQuestion>,
+})
 </script>
 
 <template>
@@ -15,10 +24,13 @@ defineProps({quiz: Object as PropType<TQuiz>})
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">QUIZ TIME</div>
-                    <QuizQuestion v-for="question in quiz.questions" :question="question"/>
+                    <QuizQuestion :question="question"/>
 
                 </div>
             </div>
         </div>
     </AuthenticatedLayout>
 </template>
+
+<script lang="ts">
+</script>

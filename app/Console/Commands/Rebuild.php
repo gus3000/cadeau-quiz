@@ -18,7 +18,7 @@ class Rebuild extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Erases the database and reloads everything from the migrations and seeders';
 
     /**
      * Execute the console command.
