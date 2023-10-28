@@ -32,7 +32,7 @@ class GuessController extends Controller
         $guess = Guess::where($baseGuessAttributes)->first();
 
         if (is_null($guess)) {
-            return Guess::create(array_merge($baseGuessAttributes, [
+            return Guess::factory()->create(array_merge($baseGuessAttributes, [
                 'answer_id' => $answer->id,
             ]));
         }
