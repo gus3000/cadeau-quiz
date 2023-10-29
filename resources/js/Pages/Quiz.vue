@@ -3,8 +3,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, router} from '@inertiajs/vue3';
 import type {TQuiz} from "@/Model/TQuiz.d.ts";
 import type {PropType} from "vue";
-import QuizQuestion from "@/Components/QuizQuestion.vue";
+import QuizQuestion from "@/Components/Quiz/QuizQuestion.vue";
 import type {TQuestion} from "@/Model/TQuestion";
+import QuizAdminPanel from "@/Components/Quiz/QuizAdminPanel.vue";
 
 Echo.private('quiz.flow')
     .listen('CloseQuestion', (e) => {
@@ -31,9 +32,7 @@ defineProps({
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">{{quiz.name}} - {{quiz.id}}{{ admin ? ' - admin' : ''}}</div>
                     <QuizQuestion :question="question"/>
-                    <div v-if="question?.finished">
-                        Fini !
-                    </div>
+                    <QuizAdminPanel v-if="admin" :quiz="quiz" :question="question"/>
                 </div>
             </div>
         </div>

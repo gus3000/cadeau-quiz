@@ -8,7 +8,6 @@ import axios from "axios";
 function selectAnswer(question: TQuestion, answer: TAnswer) {
     const url = `/api/user/guess/${question?.id}/${answer.id}`;
     axios.put(url);
-    // router.put();
 }
 
 defineProps({question: Object as PropType<TQuestion>})

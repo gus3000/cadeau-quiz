@@ -16,14 +16,14 @@ class UserSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'name' => 'cadeauJeff',
-            'email' => 'gus3000flood@gmail.com',
+            'name' => 'castless',
+            'email' => 'gus3000spam@gmail.com',
             'admin' => true
         ]);
 
         User::factory()->create([
-            'name' => 'castless',
-            'email' => 'gus3000spam@gmail.com',
+            'name' => 'cadeauJeff',
+            'email' => 'gus3000flood@gmail.com',
             'admin' => false
         ]);
     }
