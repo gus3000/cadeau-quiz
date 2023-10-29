@@ -18,7 +18,7 @@ defineProps({question: Object as PropType<TQuestion>})
     <div class="bg-white p-12 rounded-lg shadow-lg w-full mt-8">
         <p class="text-2xl font-bold">{{ question?.text ?? "Le quiz va bientôt commencer !" }}</p>
         <div v-if="question?.finished">Question terminée !</div>
-        <div v-if="question" class="text-xl">Question {{question.order}}</div>
+        <div v-if="question" class="text-xl">Question {{question.order + 1}}</div>
         <label
             v-for="answer in question?.answers"
             class="block mt-4 border border-gray-300 grounded-lg py-2 px-6 text-lg"
