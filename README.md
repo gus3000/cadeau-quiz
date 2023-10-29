@@ -2,6 +2,11 @@ Un moteur de quiz, fait pour le streameur [cadeauAnthony](https://www.twitch.tv/
 
 Lui dites pas, c'est une surprise !
 
+# A faire
+- affichage des scores de la question quand la question est finie
+- interface admin
+- écran d'affichage des scores globaux avec classement
+
 # Lancer le projet en local
 
 pré-requis : avoir Docker installé et configuré pour l'utilisateur courant.
