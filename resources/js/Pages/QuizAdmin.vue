@@ -6,11 +6,7 @@ import type {PropType} from "vue";
 import QuizQuestion from "@/Components/QuizQuestion.vue";
 import type {TQuestion} from "@/Model/TQuestion";
 
-Echo.private('quiz.flow')
-    .listen('CloseQuestion', (e) => {
-        console.log("QUESTION CLOSED", e);
-        router.reload({only: ['question']});
-    })
+Echo.private('quiz.2') //FIXME
     .listen('NextQuestion', (e) => {
         console.log("NEXT QUESTION", e);
         router.reload({only: ['question']})
@@ -19,7 +15,6 @@ Echo.private('quiz.flow')
 defineProps({
     quiz: Object as PropType<TQuiz>,
     question: Object as PropType<TQuestion>,
-    admin: Boolean,
 })
 </script>
 
@@ -29,11 +24,9 @@ defineProps({
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">{{quiz.name}} - {{quiz.id}}{{ admin ? ' - admin' : ''}}</div>
+                    <div class="p-6 text-gray-900 dark:text-gray-100">QUIZ TIME (Admin)</div>
                     <QuizQuestion :question="question"/>
-                    <div v-if="question?.finished">
-                        Fini !
-                    </div>
+
                 </div>
             </div>
         </div>

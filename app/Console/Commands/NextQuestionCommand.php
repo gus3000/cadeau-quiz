@@ -7,21 +7,21 @@ use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Console\Command;
 
-class CloseQuestion extends Command
+class NextQuestionCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:close-question {question?*}';
+    protected $signature = 'app:next-question {question?*}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Marks a question as closed';
+    protected $description = 'Goes to the following question';
 
     /**
      * Execute the console command.
@@ -30,14 +30,10 @@ class CloseQuestion extends Command
     {
         $questionArgs = $this->argument('question');
         if(empty($questionArgs)) {
-            $this->info('No question id given, closing current question...');
+            $this->info('No question id given, choosing current question...');
             $quiz = Quiz::currentlyOpen();
-            $currentQuestion = $quiz->current_question;
-            $this->info("Chose question {$currentQuestion->id} from quiz {$quiz->id}");
-            $currentQuestion->finished = true;
-            $currentQuestion->save();
-
-            NextQuestion::dispatch($quiz->current_question);
+            $quiz->nextQuestion();
+            NextQuestion::dispatch($quiz);
             return;
         }
         $questions = Question::find($questionArgs);

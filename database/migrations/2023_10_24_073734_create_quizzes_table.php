@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +19,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->date('opened_at')->nullable();
-            $table->foreignIdFor(User::class, 'created_by')->constrained('users','id');
+            $table->foreignIdFor(User::class, 'created_by')->constrained('users');
             $table->string('name');
             $table->string('short_name');
             $table->boolean('finished')->default(false);

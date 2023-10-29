@@ -8,6 +8,8 @@ export interface TQuestion {
     deleted_at: ?Date,
     quiz: TQuiz,
     text: string,
+    order: int,
+    open: boolean,
     finished: boolean,
     answers: Array[TAnswer],
 }

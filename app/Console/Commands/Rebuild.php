@@ -27,6 +27,6 @@ class Rebuild extends Command
     {
         $this->call("migrate:fresh");
         $this->call("app:seed");
-        $this->call("ide-helper:models", ["--write" => true]);
+        $this->call("ide-helper:models", ["--write" => true, "--smart-reset" => true]);
     }
 }

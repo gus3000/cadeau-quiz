@@ -19,7 +19,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int)$user->id === (int)$id;
 });
 
-Broadcast::channel('quiz.{quiz}', function (User $user, Quiz $quiz) {
-    return !$quiz->finished;
-    return $quiz->is_open;
+Broadcast::channel('quiz.flow', function () {
+    return Quiz::currentlyOpen() !== null;
+
 });

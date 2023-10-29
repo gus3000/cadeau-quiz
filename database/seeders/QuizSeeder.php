@@ -16,7 +16,7 @@ class QuizSeeder extends Seeder
         $user = User::whereEmail('gus3000spam@gmail.com')->first();
 
         $quiz = Quiz::factory()->create([
-            'name' => 'Ennemis de JV',
+            'name' => 'Ennemis de JV (beta)',
             'short_name' => 'ennemis_jv',
             'created_by' => $user->id,
             'opened_at' => new \DateTime(),
@@ -34,6 +34,8 @@ class QuizSeeder extends Seeder
         ]);
 
         $this->importCsv($quiz);
+//        $quiz->current_question = Question::whereQuizId($quiz->id)->orderBy('order')->first()->id;
+        $quiz->save();
     }
 
     private function importCsv(Quiz $quiz): void
@@ -45,7 +47,8 @@ class QuizSeeder extends Seeder
         foreach ($csv as $index => $row) {
             $questionData = array_combine($keys, $row);
             $questionData['quiz_id'] = $quiz->id;
-            $questionData['finished'] = $quiz->finished;
+            $questionData['open'] = false;
+            $questionData['order'] = $index;
 
             $correct_answer = $questionData['answer'];
             $answers = [

@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Question;
+use App\Models\Quiz;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Socialite\Facades\Socialite;
@@ -39,20 +42,19 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth'])
     ->prefix('quiz')
-    ->group(function() {
-    Route::get('/', function() {
-        $quiz = \App\Models\Quiz::currentlyOpen();
-        $question = $quiz->currentQuestion;
-//        foreach($quiz->questions as $question) {
-//            foreach($question->answers as $answer) {
-//                $answer->label;
-//            }
-//        }
-        return Inertia::render('Quiz', [
-            'quiz' => $quiz,
-            'question' => $question
-        ]);
+    ->group(function () {
+        Route::get('/', function () {
+            $user = Auth::user();
+            $quiz = Quiz::currentlyOpen();
+            $question = $quiz->current_question;
+            $question?->load('answers');
+
+            return Inertia::render('Quiz', [
+                'quiz' => $quiz,
+                'question' => $question,
+                'admin' => $user->is_admin,
+            ]);
+        });
     });
-});
 
 require __DIR__ . '/auth.php';
