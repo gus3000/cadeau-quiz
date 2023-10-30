@@ -20,8 +20,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('quiz')->group(function () {
-    Route::get('/current', function() {
-       return Quiz::currentlyOpen();
+    Route::get('/current', function () {
+        return Quiz::currentlyOpen();
     });
 
     Route::get('/{quiz}', function (Quiz $quiz) {
@@ -32,22 +32,24 @@ Route::prefix('quiz')->group(function () {
         return $quiz->questions;
     });
 
-    Route::get('/{quiz}/open', function (Quiz $quiz) {
-        $quiz->open();
-        return $quiz;
-    });
+    Route::middleware(['web', 'auth:sanctum', 'admin'])->group(function () {
+        Route::get('/{quiz}/open', function (Quiz $quiz) {
+            $quiz->open();
+            return $quiz;
+        });
 
-    Route::get('/{quiz}/close', function (Quiz $quiz) {
-        $quiz->close();
-        return $quiz;
-    });
+        Route::get('/{quiz}/close', function (Quiz $quiz) {
+            $quiz->close();
+            return $quiz;
+        });
 
-    Route::post('/next-question', function() {
-        Quiz::currentlyOpen()->nextQuestion();
-    });
+        Route::post('/next-question', function () {
+            Quiz::currentlyOpen()->nextQuestion();
+        });
 
-    Route::post('/close-question', function() {
-        Quiz::currentlyOpen()->current_question->close();
+        Route::post('/close-question', function () {
+            Quiz::currentlyOpen()->current_question->close();
+        });
     });
 });
 

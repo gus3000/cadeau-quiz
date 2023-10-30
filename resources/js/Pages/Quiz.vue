@@ -6,6 +6,7 @@ import type {PropType} from "vue";
 import QuizQuestion from "@/Components/Quiz/QuizQuestion.vue";
 import type {TQuestion} from "@/Model/TQuestion";
 import QuizAdminPanel from "@/Components/Quiz/QuizAdminPanel.vue";
+import Countdown from "@/Components/Quiz/Countdown.vue";
 
 Echo.private('quiz.flow')
     .listen('CloseQuestion', (e) => {
@@ -33,6 +34,7 @@ defineProps({
                     <div class="p-6 text-gray-900 dark:text-gray-100">{{quiz.name}} - {{quiz.id}}{{ admin ? ' - admin' : ''}}</div>
                     <QuizQuestion :question="question"/>
                     <QuizAdminPanel v-if="admin" :quiz="quiz" :question="question"/>
+                    <Countdown v-if="!question?.finished" :seconds="'3s'"/>
                 </div>
             </div>
         </div>

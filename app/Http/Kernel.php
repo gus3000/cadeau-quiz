@@ -2,9 +2,12 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Admin;
 use App\Http\Middleware\QuizRedirect;
 use App\Http\Middleware\Twitch;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Laravel\Sanctum\Http\Middleware\AuthenticateSession;
+use Laravel\Sanctum\Sanctum;
 
 class Kernel extends HttpKernel
 {
@@ -79,6 +82,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
+        'admin' => Admin::class,
         'quiz_redirect' => QuizRedirect::class,
     ];
 }
