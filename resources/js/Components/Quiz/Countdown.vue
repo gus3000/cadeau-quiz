@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 defineProps({
-    seconds: Number
+    clockDuration: String
 });
 </script>
 
@@ -37,7 +37,7 @@ defineProps({
 {
     transform: rotate(-90deg);
 
-    animation-duration: v-bind(seconds);
+    animation-duration: v-bind(clockDuration);
     animation-name: rotating;
     animation-iteration-count: infinite;
     animation-timing-function: linear;

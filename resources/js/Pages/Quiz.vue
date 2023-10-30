@@ -34,7 +34,7 @@ defineProps({
                     <div class="p-6 text-gray-900 dark:text-gray-100">{{quiz.name}} - {{quiz.id}}{{ admin ? ' - admin' : ''}}</div>
                     <QuizQuestion :question="question"/>
                     <QuizAdminPanel v-if="admin" :quiz="quiz" :question="question"/>
-                    <Countdown v-if="!question?.finished" :seconds="'3s'"/>
+                    <Countdown v-if="!question?.finished" :clockDuration="'3s'"/>
                 </div>
             </div>
         </div>
