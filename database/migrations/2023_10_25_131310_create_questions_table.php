@@ -16,11 +16,11 @@ return new class extends Migration {
             $table->id();
             $table->timestamps();
             $table->softDeletes();
+            $table->timestamp('opened_at')->nullable();
             $table->foreignIdFor(Quiz::class)->constrained();
             $table->string('text');
+            $table->float('duration')->default(30);
             $table->integer('order');
-            $table->boolean('open')->default(false);
-            $table->boolean('finished')->default(false);
         });
     }
 

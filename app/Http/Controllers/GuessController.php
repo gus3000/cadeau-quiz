@@ -38,12 +38,16 @@ class GuessController extends Controller
         }
 
         if ($question->finished) {
-            throw new \Exception('La question est close, vous ne pouvez plus changer votre réponse');
+            abort(401, 'La question est close, vous ne pouvez plus changer votre réponse');
+        }
+
+        if (is_null($question->opened_at)) {
+            abort(401, 'La question n\'est pas encore ouverte, vous ne pouvez pas encore voter');
         }
 
         $quiz = $question->quiz;
         if ($quiz->finished)
-            throw new \Exception('Le quiz est clos, vous ne pouvez plus changer votre réponse');
+            abort(401, 'Le quiz est clos, vous ne pouvez plus changer votre réponse');
 
         $guess->answer_id = $answer->id;
         $guess->save();

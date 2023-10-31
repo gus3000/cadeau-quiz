@@ -14,7 +14,7 @@ class NextQuestionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:next-question {question?*}';
+    protected $signature = 'app:next-question';
 
     /**
      * The console command description.
@@ -28,20 +28,10 @@ class NextQuestionCommand extends Command
      */
     public function handle()
     {
-        $questionArgs = $this->argument('question');
-        if(empty($questionArgs)) {
-            $this->info('No question id given, choosing current question...');
-            $quiz = Quiz::currentlyOpen();
-            $quiz->nextQuestion();
-            NextQuestion::dispatch($quiz);
-            return;
-        }
-        $questions = Question::find($questionArgs);
-        foreach ($questions as $question) {
-            $this->info("Marking question {$question->id} as finished");
-            $question->finished = true;
-            $question->save();
-        }
+        $this->info('Going to the next question !');
+        $quiz = Quiz::currentlyOpen();
+        $quiz->nextQuestion();
+        NextQuestion::dispatch($quiz);
 
     }
 }

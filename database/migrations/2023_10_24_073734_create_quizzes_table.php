@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->date('opened_at')->nullable();
+            $table->dateTime('opened_at')->nullable();
             $table->foreignIdFor(User::class, 'created_by')->constrained('users');
             $table->string('name');
             $table->string('short_name');

@@ -56,7 +56,7 @@ class Quiz extends Model
             ->first();
     }
 
-    public function getIsOpenAttribute()
+    public function getIsOpenAttribute(): bool
     {
         return $this->opened_at !== null && !$this->finished;
     }
@@ -80,7 +80,6 @@ class Quiz extends Model
         } else {
             $questions = $this->questions->getIterator();
             foreach ($questions as $question) {
-                dump($question->id);
                 if ($question->id === $currentQuestion->id)
                     break;
             }
@@ -91,9 +90,11 @@ class Quiz extends Model
 
         $this->save();
 
+        $currentQuestion = $this->current_question;
+
 //        $currentQuestion = Question::find($this->current_question);
-        $this->current_question->open = true;
-        $this->current_question->save();
+        $currentQuestion->opened_at = new \DateTime();
+        $currentQuestion->save();
         NextQuestion::dispatch($this);
     }
 
@@ -107,20 +108,13 @@ class Quiz extends Model
         if ($question->quiz_id !== $this->id)
             throw new \Exception("cannot set current question to question {$question->id} with quiz_id {$question->quiz_id} on quiz {$this->id}");
 
-        foreach ($this->questions as $quizQuestion) {
-            if ($quizQuestion->open)
-                $quizQuestion->close();
-        }
-
-        $question->open = true;
-        $question->finished = false;
+        $question->opened_at = new \DateTime();
         $question->save();
     }
 
     public function getCurrentQuestionAttribute(): ?Question
     {
         return
-            $this->questions->where('open', true)->first() ??
-            $this->questions->where('finished', true)->last();
+            $this->questions->whereNotNull('opened_at')->last();
     }
 }
