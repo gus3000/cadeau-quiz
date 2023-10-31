@@ -6,23 +6,41 @@ import type {TAnswer} from "@/Model/TAnswer";
 import axios from "axios";
 import Countdown from "@/Components/Quiz/Countdown.vue";
 
-function selectAnswer(question: TQuestion, answer: TAnswer) {
-    const url = `/api/user/guess/${question?.id}/${answer.id}`;
+function selectAnswer(answer: TAnswer) {
+    const url = `/api/user/guess/${props.question?.id}/${answer.id}`;
     axios.put(url);
+}
+
+function answerClass(answer: TAnswer) {
+    if (!props.questionFinished || props.question?.correct_answer == null)
+        return ['radio-label-neutral'];
+    if(answer.id === props.question?.correct_answer?.id)
+        return ['radio-label-good'];
+    return ['radio-label-bad'];
 }
 
 const props = defineProps({
     question: Object as PropType<TQuestion>,
     questionFinished: Boolean,
     remainingSeconds: Number,
-})
-watch(() => props.question.id, (newId, oldId) => {
+});
+
+watch(() => props.question?.id, (newId, oldId) => {
     if (newId !== oldId) {
         document.getElementsByName(`question-answer-${oldId}`).forEach((input) => {
             input.checked = false;
         })
     }
 });
+
+watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
+    if (newCorrect === undefined) {
+        console.log("pas de triche !")
+    } else {
+        console.log("new correct answer :", newCorrect)
+
+    }
+})
 </script>
 
 <template>
@@ -30,6 +48,7 @@ watch(() => props.question.id, (newId, oldId) => {
         <Countdown v-show="!questionFinished" :total="question?.duration" :remaining="remainingSeconds"
                    :question-finished="questionFinished"/>
     </Transition>
+
     <p class="text-2xl font-bold">{{ question?.text ?? "Le quiz va bientôt commencer !" }}</p>
     <div v-if="questionFinished">Question terminée !</div>
     <div v-if="question" class="text-xl">Question {{ question.order + 1 }}</div>
@@ -40,17 +59,14 @@ watch(() => props.question.id, (newId, oldId) => {
                 :name="`question-answer-${question.id}`"
                 class="hidden peer"
                 type="radio"
-                @change="selectAnswer(question,answer)"
+                @change="selectAnswer(answer)"
                 :disabled="questionFinished"
             />
             <label
                 :for="`answer-${answer.id}`"
-                class="block mt-4 border border-gray-300 grounded-lg py-2 px-6 text-lg
-                 text-gray-800 bg-white border border-gray-200 rounded-lg cursor-pointer
-                 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-1000 hover:bg-gray-100"
-                :class="{
-                'bg-gray-200': questionFinished
-            }"
+                class="block mt-4 border border-gray-300 grounded-lg py-2 px-6 text-lg rounded-lg cursor-pointer
+                 "
+                :class="answerClass(answer)"
             >
                 {{ answer.text }}
             </label>

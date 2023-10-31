@@ -12,5 +12,6 @@ export interface TQuestion {
     order: int,
     /** ⚠ UTC */
     opened_at: Date,
+    correct_answer: ?TAnswer
     answers: Array[TAnswer],
 }

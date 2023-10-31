@@ -5,7 +5,6 @@ import type {TQuiz} from "@/Model/TQuiz";
 
 
 function nextQuestion() {
-    console.log("next");
     axios.post(`/api/quiz/next-question`);
 }
 

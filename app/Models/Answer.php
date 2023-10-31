@@ -30,4 +30,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Answer extends Model
 {
     use HasFactory;
+
+    protected $hidden = [
+        'correct'
+    ];
 }

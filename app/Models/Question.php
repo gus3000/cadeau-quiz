@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $order
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Answer> $answers
  * @property-read int|null $answers_count
+ * @property-read \App\Models\Answer $correct_answer
  * @property-read bool $finished
  * @property-read bool $is_open
  * @property-read \App\Models\Quiz $quiz
@@ -53,6 +54,10 @@ class Question extends Model
         'opened_at' => 'datetime'
     ];
 
+    protected $appends = [
+        'correct_answer'
+    ];
+
     public function getIsOpenAttribute(): bool
     {
         return !is_null($this->opened_at);
@@ -73,8 +78,15 @@ class Question extends Model
         return $this->belongsTo(Quiz::class);
     }
 
+    public function getCorrectAnswerAttribute(): Answer
+    {
+        return $this->answers
+            ->where('correct', '=', true)
+            ->first();
+    }
+
     public function answers(): HasMany
     {
-        return $this->hasMany(Answer::class);
+        return $this->hasMany(Answer::class)->inRandomOrder('id');
     }
 }

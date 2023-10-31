@@ -18,7 +18,7 @@ const props = defineProps({
 function setQuestionEndTimer() {
     const rem = remainingSeconds.value
     if (rem && rem > 0) {
-        console.log("setting timer to", rem)
+        // console.log("setting timer to", rem)
         const showStatsTimeout = setTimeout(function () {
             router.reload({only: ['question']});
         }, (rem + Durations.TIME_TO_WAIT_BEFORE_STATS) * 1000)
@@ -77,7 +77,6 @@ Echo.private('quiz.flow')
                         {{ quiz.id }}{{ admin ? ' - admin' : '' }}
                     </div>
                     <div class="bg-white p-12 rounded-lg shadow-lg w-full mt-8">
-
 <!--                        <pre>Remaining seconds : {{ remainingSeconds }}</pre>-->
 <!--                        <pre>question finished : {{ questionFinished }}</pre>-->
                         <QuizQuestion :question="question"

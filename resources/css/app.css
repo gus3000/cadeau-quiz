@@ -2,12 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-.btn {
-    @apply font-bold py-2 px-4 rounded;
-}
-.btn-neutral {
-    @apply bg-gray-500 text-white;
-}
-.btn-neutral:hover {
-    @apply bg-gray-700;
+@layer base {
+    .btn {
+        @apply font-bold py-2 px-4 rounded;
+    }
+
+    .btn-neutral {
+        @apply bg-gray-500 text-white;
+    }
+
+    .btn-neutral:hover {
+        @apply bg-gray-700;
+    }
+
+    .radio-label-neutral {
+        @apply text-gray-800;
+        @apply hover:text-gray-900 hover:bg-gray-100;
+        @apply peer-checked:border-blue-600 peer-checked:text-blue-600
+    }
+
+    .radio-label-good {
+        @apply bg-green-500 text-white font-bold;
+    }
+
+    .radio-label-bad {
+        @apply bg-red-500 text-white font-bold;
+        @apply hover:bg-red-400;
+
+    }
+
 }
