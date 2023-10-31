@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $short_name
  * @property int $finished
  * @property \App\Models\Question|null $current_question
- * @property-read mixed $is_open
+ * @property-read bool $is_open
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Question> $questions
  * @property-read int|null $questions_count
  * @method static \Database\Factories\QuizFactory factory($count = null, $state = [])

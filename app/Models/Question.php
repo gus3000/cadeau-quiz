@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Answer> $answers
  * @property-read int|null $answers_count
  * @property-read bool $finished
- * @property-read bool $open
+ * @property-read bool $is_open
  * @property-read \App\Models\Quiz $quiz
  * @method static \Database\Factories\QuestionFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Question newModelQuery()

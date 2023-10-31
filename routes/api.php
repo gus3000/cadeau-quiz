@@ -57,6 +57,12 @@ Route::prefix('question')->group(function () {
     Route::get('/{question}/quiz', function (Question $question) {
         return $question->quiz;
     });
+
+    Route::get('/{question}/guesses', function (Question $question) {
+        if($question->is_open)
+            abort(401, 'La question est encore ouverte, vous ne pouvez pas récuperer les réponses');
+        return Guess::whereQuestionId($question->id);
+    });
 });
 
 Route::prefix('user')

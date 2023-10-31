@@ -20,10 +20,12 @@ function setQuestionEndTimer() {
     if (rem && rem > 0) {
         console.log("setting timer to", rem)
         const showStatsTimeout = setTimeout(function () {
-            console.log("question finished !");
             router.reload({only: ['question']});
         }, (rem + Durations.TIME_TO_WAIT_BEFORE_STATS) * 1000)
-
+        const hideClockTimeout = setTimeout(() => {
+            console.log("question finished !");
+            router.reload({only: ['question']});
+        }, rem * 1000)
     }
 }
 
@@ -54,10 +56,10 @@ setQuestionEndTimer();
 Echo.private('quiz.flow')
     .listen('NextQuestion', (e) => {
         console.log("NEXT QUESTION", e);
-        console.log("question id before :", props.question?.id);
+        // console.log("question id before :", props.question?.id);
         router.reload({
             only: ['question'], onFinish: () => {
-                console.log("question id after :", props.question.id);
+                // console.log("question id after :", props.question.id);
                 setQuestionEndTimer();
             }
         })
