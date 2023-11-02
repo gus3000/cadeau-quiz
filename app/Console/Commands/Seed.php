@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\MediaType;
 use Database\Seeders\GuessSeeder;
+use Database\Seeders\MediaTypeSeeder;
 use Database\Seeders\QuizSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Console\Command;
@@ -31,6 +33,7 @@ class Seed extends Command
     {
         foreach ([
                      UserSeeder::class,
+                     MediaTypeSeeder::class,
                      QuizSeeder::class,
                      GuessSeeder::class,
                  ] as $seederClass) {

@@ -34,7 +34,8 @@ const textRefresh = setInterval(() => {
 
 
     let el = document.getElementById('label-remaining-time');
-    el.innerText = dynamicRemaining.toFixed(2);
+    if (el)
+        el.innerText = dynamicRemaining.toFixed(2);
     lastTextRefresh = now;
 }, 50);
 

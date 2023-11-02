@@ -48,6 +48,8 @@ Route::middleware(['auth'])
             $quiz = Quiz::currentlyOpen();
             $question = $quiz->current_question;
             $question?->load('answers');
+            
+            $question?->makeHiddenIf(!$question->finished, 'correct_answer');
 
             return Inertia::render('Quiz', [
                 'quiz' => $quiz,

@@ -13,7 +13,7 @@ class QuizSeeder extends Seeder
 {
     public function run(): void
     {
-        $user = User::whereEmail('gus3000spam@gmail.com')->first();
+        $user = User::whereName('castless')->first();
 
         $quiz = Quiz::factory()->create([
             'name' => 'Ennemis de JV (beta)',
@@ -61,11 +61,15 @@ class QuizSeeder extends Seeder
             }
             $question = Question::create($questionData);
 
-            foreach ($answers as $answer) {
+            $orders = range(1, count($answers));
+            shuffle($orders);
+
+            foreach ($answers as $i => $answer) {
                 Answer::create([
                     'question_id' => $question->id,
                     'text' => $answer,
-                    'correct' => $answer === $correct_answer
+                    'correct' => $answer === $correct_answer,
+                    'order' => $orders[$i],
                 ]);
             }
         }
