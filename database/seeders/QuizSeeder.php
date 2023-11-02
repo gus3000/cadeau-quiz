@@ -13,7 +13,7 @@ class QuizSeeder extends Seeder
 {
     public function run(): void
     {
-        $user = User::whereEmail('gus3000spam@gmail.com')->first();
+        $user = User::whereName('castless')->first();
 
         $quiz = Quiz::factory()->create([
             'name' => 'Ennemis de JV (beta)',
