@@ -4,7 +4,6 @@ services:
   nginx:
     image: nginx:stable-alpine
     container_name: nginx
-    # user: "1000:1000"
     ports:
       - "80:80"
       - "443:443"
@@ -41,12 +40,15 @@ services:
     build:
       context: .
       dockerfile: docker/prod/php/Dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
     container_name: php
-    # user: "1000:1000"
     volumes:
       - .:/var/www/html
     ports:
       - "9000:9000"
+      - "6001:6001"
     networks:
       - laravel
   
