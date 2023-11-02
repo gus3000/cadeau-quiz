@@ -87,6 +87,6 @@ class Question extends Model
 
     public function answers(): HasMany
     {
-        return $this->hasMany(Answer::class)->inRandomOrder('id');
+        return $this->hasMany(Answer::class)->orderBy('order');
     }
 }

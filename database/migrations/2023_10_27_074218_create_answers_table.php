@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\Question::class)->constrained();
             $table->string('text');
             $table->boolean('correct');
+            $table->integer('order');
+            $table->unique(['question_id', 'order']);
         });
     }
 
