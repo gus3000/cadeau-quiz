@@ -49,6 +49,9 @@ class Quiz extends Model
     use HasFactory;
     use SoftDeletes;
 
+    const CLIENT_GRACE_PERIOD_SECONDS = 3.0;
+    const SERVER_GRACE_PERIOD_SECONDS = 1.0; // on top of client grace period
+
     public static function currentlyOpen(): ?Quiz
     {
         return self::whereFinished(false)

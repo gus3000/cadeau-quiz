@@ -5,6 +5,7 @@ import {router} from "@inertiajs/vue3";
 import type {TAnswer} from "@/Model/TAnswer";
 import axios from "axios";
 import Countdown from "@/Components/Quiz/Countdown.vue";
+import type {TGuess} from "@/Model/TGuess";
 
 function selectAnswer(answer: TAnswer) {
     const url = `/api/user/guess/${props.question?.id}/${answer.id}`;
@@ -12,17 +13,21 @@ function selectAnswer(answer: TAnswer) {
 }
 
 function answerClass(answer: TAnswer) {
-    if (!props.questionFinished || props.question?.correct_answer == null)
-        return ['radio-label-neutral'];
-    if(answer.id === props.question?.correct_answer?.id)
+    console.log("guess answer", props.guess?.answer?.id);
+    console.log("answer", answer.id);
+    if (answer.id === props.question?.correct_answer?.id)
         return ['radio-label-good'];
-    return ['radio-label-bad'];
+    if (answer.id === props.guess?.answer?.id)
+        return ['radio-label-bad'];
+
+    return ['radio-label-neutral'];
+
 }
 
 const props = defineProps({
     question: Object as PropType<TQuestion>,
+    guess: Object as PropType<TGuess>,
     questionFinished: Boolean,
-    remainingSeconds: Number,
 });
 
 watch(() => props.question?.id, (newId, oldId) => {
@@ -35,7 +40,7 @@ watch(() => props.question?.id, (newId, oldId) => {
 
 watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
     if (newCorrect === undefined) {
-        console.log("pas de triche !")
+        // console.log("pas de triche !")
     } else {
         console.log("new correct answer :", newCorrect)
 
@@ -45,7 +50,10 @@ watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
 
 <template>
     <Transition name="bounce">
-        <Countdown v-show="!questionFinished" :total="question?.duration" :remaining="remainingSeconds"
+
+        <Countdown v-show="!questionFinished"
+                   :total="question?.duration"
+                   :remaining="question?.time_remaining_with_grace_period"
                    :question-finished="questionFinished"/>
     </Transition>
 

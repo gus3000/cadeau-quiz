@@ -40,10 +40,8 @@ class AutoCloseQuestionCommand extends Command
                 $this->info('Current question already closed.');
                 return;
             }
-            $timeToClose = $question->opened_at->addSeconds($question->duration);
-            $now = Carbon::now();
 
-            if ($timeToClose > $now) {
+            if ($question->time_remaining_with_grace_period > 0) {
                 $this->info('Current question is still going');
                 return;
             }

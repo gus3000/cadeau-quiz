@@ -12,15 +12,18 @@ import {Durations} from "@/Constants";
 const props = defineProps({
     quiz: Object as PropType<TQuiz>,
     question: Object as PropType<TQuestion>,
+    guess: Object as PropType<TGuess>,
     admin: Boolean,
 });
 
 function setQuestionEndTimer() {
-    const rem = remainingSeconds.value
+    // const rem = remainingSeconds.value
+    const rem = props.question?.time_remaining_with_grace_period;
+    console.log("remaining :", rem);
     if (rem && rem > 0) {
         // console.log("setting timer to", rem)
         const showStatsTimeout = setTimeout(function () {
-            router.reload({only: ['question']});
+            // router.reload({only: ['question']});
         }, (rem + Durations.TIME_TO_WAIT_BEFORE_STATS) * 1000)
         const hideClockTimeout = setTimeout(() => {
             console.log("question finished !");
@@ -28,26 +31,11 @@ function setQuestionEndTimer() {
     }
 }
 
-const remainingSeconds = computed(() => {
-    if (props.question === null)
-        return null;
-    if (props.question.opened_at === null)
-        return null;
-    let questionOpenDate = DateTime.fromISO(props.question.opened_at, {zone: "UTC"});
-    let questionCloseDate = questionOpenDate.plus({seconds: props.question.duration});
-    let now = DateTime.now();
-    // console.log("raw opened date :", props.question.opened_at)
-    // console.log("question opened at ", questionOpenDate.toString());
-    // console.log("question closes at ", questionCloseDate.toString());
-    // console.log("current date :", now.toString())
-
-    let remaining = questionCloseDate.diff(now).as('seconds');
-    return Math.max(remaining, 0);
-
-});
-
 const questionFinished = computed(() => {
-    return remainingSeconds.value <= 0;
+    if (props.question === null || props.question === undefined)
+        return false;
+    console.log('question :', props.question);
+    return props.question?.time_remaining_with_grace_period <= 0;
 });
 
 setQuestionEndTimer();
@@ -62,10 +50,11 @@ Echo.private('quiz.flow')
                 setQuestionEndTimer();
             }
         })
-    }).listen('QuestionClosed', (e) => {
-    console.log("Question closed !");
-    router.reload({only: ['question']});
-});
+    })
+    .listen('QuestionClosed', (e) => {
+        console.log("Question closed !");
+        router.reload({only: ['question', 'guess']});
+    });
 </script>
 
 <template>
@@ -80,9 +69,11 @@ Echo.private('quiz.flow')
                     <div class="bg-white p-12 rounded-lg shadow-lg w-full mt-8">
                         <!--                        <pre>Remaining seconds : {{ remainingSeconds }}</pre>-->
                         <!--                        <pre>question finished : {{ questionFinished }}</pre>-->
-                        <QuizQuestion :question="question"
-                                      :remainingSeconds="remainingSeconds"
-                                      :questionFinished="questionFinished"/>
+                        <QuizQuestion
+                            v-if="question"
+                            :question="question"
+                            :guess="guess"
+                            :questionFinished="questionFinished"/>
                         <QuizAdminPanel
                             v-if="admin"
                             :quiz="quiz"

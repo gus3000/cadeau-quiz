@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -16,6 +17,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $text
  * @property int $correct
  * @property int $order
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Guess> $guesses
+ * @property-read int|null $guesses_count
+ * @property-read \App\Models\Question $question
  * @method static \Database\Factories\AnswerFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Answer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Answer newQuery()
@@ -36,4 +40,13 @@ class Answer extends Model
     protected $hidden = [
         'correct'
     ];
+
+    public function question(): BelongsTo {
+        return $this->belongsTo(Question::class);
+    }
+
+    public function guesses(): HasMany
+    {
+        return $this->hasMany(Guess::class);
+    }
 }

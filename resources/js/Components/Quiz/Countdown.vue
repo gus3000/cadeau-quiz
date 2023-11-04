@@ -13,7 +13,7 @@ const props = defineProps({
     questionFinished: Boolean,
 });
 
-let dynamicRemaining = 0;
+let dynamicRemaining = props.remaining ?? 0;
 
 const clockDurationSeconds = computed(() => {
     return `${props.total}s`;
@@ -25,7 +25,6 @@ const clockDelay = computed(() => {
 
 let lastTextRefresh = DateTime.now();
 const textRefresh = setInterval(() => {
-
     let now = DateTime.now();
     let diff = now.diff(lastTextRefresh).as('seconds');
 

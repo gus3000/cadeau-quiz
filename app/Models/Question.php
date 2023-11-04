@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\QuestionClosed;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Models\Answer $correct_answer
  * @property-read bool $finished
  * @property-read bool $is_open
+ * @property-read float|null $time_remaining
+ * @property-read float|null $time_remaining_with_grace_period
  * @property-read \App\Models\Media|null $media
  * @property-read \App\Models\Quiz $quiz
  * @method static \Database\Factories\QuestionFactory factory($count = null, $state = [])
@@ -60,7 +63,8 @@ class Question extends Model
     ];
 
     protected $appends = [
-        'correct_answer'
+        'correct_answer',
+        'time_remaining_with_grace_period'
     ];
 
     public function getIsOpenAttribute(): bool
@@ -90,13 +94,46 @@ class Question extends Model
             ->first();
     }
 
-    public function setClosedAttribute(bool $closed): void {
+    public function setClosedAttribute(bool $closed): void
+    {
         $wasClosed = $this->closed;
-        if(!$wasClosed && $closed){
+        if (!$wasClosed && $closed && $this->id) {
             QuestionClosed::dispatch($this->id);
         }
 
         $this->attributes['closed'] = $closed;
+    }
+
+    public function getTimeRemainingAttribute(): float|null {
+        if (is_null($this->opened_at))
+            return null;
+
+        $now = Carbon::now();
+        $delta = $now->floatDiffInSeconds($this->opened_at, false);
+
+        return max(0, $delta + $this->duration);
+    }
+
+    public function getTimeRemainingWithGracePeriodAttribute(): float|null
+    {
+        if (is_null($this->opened_at))
+            return null;
+
+        $now = Carbon::now();
+        $delta = $now->floatDiffInSeconds($this->opened_at, false);
+        $remaining = $delta + $this->duration;
+
+        $cappedRemaining = min($this->duration, $remaining + Quiz::CLIENT_GRACE_PERIOD_SECONDS);
+        return max(0, $cappedRemaining);
+    }
+
+    public function guessFromUser(User $user): ?Guess
+    {
+        $answerIds = $this->answers->map(fn ($answer) => $answer->id);
+
+        return Guess::whereUserId($user->id)
+            ->whereIn('answer_id', $answerIds)
+            ->first();
     }
 
     public function answers(): HasMany

@@ -12,6 +12,7 @@ export interface TQuestion {
     order: int,
     /** ⚠ UTC */
     opened_at: Date,
-    correct_answer: ?TAnswer
+    correct_answer: ?TAnswer,
     answers: Array[TAnswer],
+    time_remaining_with_grace_period: float,
 }

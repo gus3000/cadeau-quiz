@@ -18,11 +18,10 @@ return new class extends Migration
         Schema::create('guesses', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignIdFor(Question::class)->constrained();
             $table->foreignIdFor(Answer::class)->constrained();
             $table->foreignIdFor(User::class)->constrained();
 
-            $table->unique(['user_id', 'question_id']);
+            $table->unique(['user_id', 'answer_id']);
         });
     }
 

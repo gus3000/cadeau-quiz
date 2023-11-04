@@ -22,7 +22,7 @@ class GuessSeeder extends Seeder
                     $answers = Answer::whereQuestionId($question->id);
                     $guessedAnswer = $answers->inRandomOrder()->first();
                     Guess::factory()->create([
-                        'question_id' => $question->id,
+//                        'question_id' => $question->id,
                         'user_id' => $user->id,
                         'answer_id' => $guessedAnswer->id,
                     ]);

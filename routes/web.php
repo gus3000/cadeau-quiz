@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Guess;
 use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Foundation\Application;
@@ -53,9 +54,14 @@ Route::middleware(['auth'])
 
             $question?->makeHiddenIf(!$question->closed, 'correct_answer');
 
+            $guess = $question?->guessFromUser($user);
+
+            $guess?->load('answer.question');
+
             return Inertia::render('Quiz', [
                 'quiz' => $quiz,
                 'question' => $question,
+                'guess' => $guess,
                 'admin' => $user->is_admin,
             ]);
         });

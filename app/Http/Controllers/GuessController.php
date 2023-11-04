@@ -22,14 +22,16 @@ class GuessController extends Controller
 
     public function updateGuess(Question $question, Answer $answer)
     {
+        if ($question->id !== $answer->question_id)
+            abort(401, "Given question {$question->id} and answer {$answer->id} do not match");
+
         $user = Auth::user();
 
         $baseGuessAttributes = [
             'user_id' => $user->id,
-            'question_id' => $question->id,
         ];
 
-        $guess = Guess::where($baseGuessAttributes)->first();
+        $guess = $question->guessFromUser($user);
 
         if (is_null($guess)) {
             return Guess::factory()->create(array_merge($baseGuessAttributes, [
