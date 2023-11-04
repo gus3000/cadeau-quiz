@@ -20,6 +20,12 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
+Route::get('/phpinfo', function () {
+    if (App::isProduction())
+        abort(403);
+    return phpinfo();
+});
+
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect('dashboard');
@@ -44,7 +50,7 @@ Route::middleware(['auth'])
             $quiz = Quiz::currentlyOpen();
             $question = $quiz->current_question;
             $question?->load('answers');
-            
+
             $question?->makeHiddenIf(!$question->finished, 'correct_answer');
 
             return Inertia::render('Quiz', [
