@@ -62,6 +62,6 @@ jobs:
             ls -al
           SCRIPT_AFTER: |
             pwd
-            ls -al
+            cd ${{ secrets.REMOTE_TARGET }}
             make deploy
 
