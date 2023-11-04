@@ -27,6 +27,7 @@ class Rebuild extends Command
     {
         $this->call("migrate:fresh");
         $this->call("app:seed", ['--force' => true]);
-        $this->call("ide-helper:models", ["--write" => true, "--smart-reset" => true]);
+        if(!\App::isProduction())
+            $this->call("ide-helper:models", ["--write" => true, "--smart-reset" => true]);
     }
 }
