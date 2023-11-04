@@ -26,7 +26,7 @@ class Rebuild extends Command
     public function handle()
     {
         $this->call("migrate:fresh");
-        $this->call("app:seed");
+        $this->call("app:seed", ['--force' => true]);
         $this->call("ide-helper:models", ["--write" => true, "--smart-reset" => true]);
     }
 }

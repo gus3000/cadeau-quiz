@@ -95,7 +95,7 @@ class Quiz extends Model
 //        $currentQuestion = Question::find($this->current_question);
         $currentQuestion->opened_at = new \DateTime();
         $currentQuestion->save();
-        NextQuestion::dispatch($this);
+        NextQuestion::dispatch();
     }
 
     public function questions(): HasMany

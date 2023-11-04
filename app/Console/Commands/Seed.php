@@ -8,15 +8,18 @@ use Database\Seeders\MediaTypeSeeder;
 use Database\Seeders\QuizSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Console\Command;
+use Illuminate\Console\ConfirmableTrait;
 
 class Seed extends Command
 {
+    use ConfirmableTrait;
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:seed';
+    protected $signature = 'app:seed {--force}';
 
 
     /**
@@ -31,6 +34,10 @@ class Seed extends Command
      */
     public function handle()
     {
+        if (! $this->confirmToProceed()) {
+            return 1;
+        }
+
         foreach ([
                      UserSeeder::class,
                      MediaTypeSeeder::class,
@@ -38,7 +45,7 @@ class Seed extends Command
                      GuessSeeder::class,
                  ] as $seederClass) {
             $this->info("Seeding from {$seederClass}");
-            $this->callSilently('db:seed', ['--class' => $seederClass, '--no-interaction' => true]);
+            $this->callSilently('db:seed', ['--class' => $seederClass, '--force' => true]);
         }
 
     }

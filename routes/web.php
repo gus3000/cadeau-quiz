@@ -20,10 +20,6 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
-Route::get('/phpinfo', function () {
-    return phpinfo();
-});
-
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect('dashboard');

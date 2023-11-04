@@ -31,7 +31,6 @@ services:
       MYSQL_DATABASE: '${DB_DATABASE}'
       MYSQL_USER: '${DB_USERNAME}'
       MYSQL_PASSWORD: '${DB_PASSWORD}'
-      SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     networks:
       - laravel
@@ -40,18 +39,16 @@ services:
     build:
       context: .
       dockerfile: docker/prod/php/Dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
     container_name: php
+    user: "${USER_ID}:${GROUP_ID}"
     volumes:
       - .:/var/www/html
+      - ./data/certbot/conf:/etc/letsencrypt
     ports:
       - "9000:9000"
-      - "6001:6001"
     networks:
       - laravel
-  
+
   npm:
     image: node:latest
     container_name: npm
@@ -59,7 +56,7 @@ services:
       - .:/var/www/html
     working_dir: /var/www/html
     entrypoint: ['npm']
-  
+
   certbot:
     image: certbot/certbot
     volumes:
