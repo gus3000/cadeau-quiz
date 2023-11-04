@@ -23,6 +23,7 @@ prod-build: composer.phar
 
 fix-permissions:
 	sudo chown -R gus3000:gus3000 .
-	chmod 777 storage/framework/sessions
+	chmod 755 storage/framework/sessions
 	chmod 644 storage/framework/sessions/*
 
+#TODO find a way to make `artisan short-schedule:run` work
