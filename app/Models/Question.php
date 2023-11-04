@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\QuestionClosed;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $quiz_id
  * @property string $text
  * @property float $duration
+ * @property int $closed
  * @property int $order
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Answer> $answers
  * @property-read int|null $answers_count
@@ -34,6 +36,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Question newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Question onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Question query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereClosed($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereDuration($value)
@@ -85,6 +88,15 @@ class Question extends Model
         return $this->answers
             ->where('correct', '=', true)
             ->first();
+    }
+
+    public function setClosedAttribute(bool $closed): void {
+        $wasClosed = $this->closed;
+        if(!$wasClosed && $closed){
+            QuestionClosed::dispatch($this->id);
+        }
+
+        $this->attributes['closed'] = $closed;
     }
 
     public function answers(): HasMany

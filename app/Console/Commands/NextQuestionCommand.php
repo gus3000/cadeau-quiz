@@ -31,7 +31,6 @@ class NextQuestionCommand extends Command
         $this->info('Going to the next question !');
         $quiz = Quiz::currentlyOpen();
         $quiz->nextQuestion();
-        NextQuestion::dispatch($quiz);
 
     }
 }

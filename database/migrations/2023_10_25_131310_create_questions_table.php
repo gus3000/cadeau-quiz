@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->foreignIdFor(Quiz::class)->constrained();
             $table->string('text');
             $table->float('duration')->default(5);
+            $table->boolean('closed')->default(false);
             $table->integer('order');
         });
     }

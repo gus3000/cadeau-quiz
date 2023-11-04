@@ -47,7 +47,7 @@ class QuizSeeder extends Seeder
         foreach ($csv as $index => $row) {
             $questionData = array_combine($keys, $row);
             $questionData['quiz_id'] = $quiz->id;
-//            $questionData['open'] = false;
+            $questionData['closed'] = $quiz->finished;
             $questionData['order'] = $index;
 
             $correct_answer = $questionData['answer'];

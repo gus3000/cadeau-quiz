@@ -24,7 +24,6 @@ function setQuestionEndTimer() {
         }, (rem + Durations.TIME_TO_WAIT_BEFORE_STATS) * 1000)
         const hideClockTimeout = setTimeout(() => {
             console.log("question finished !");
-            router.reload({only: ['question']});
         }, rem * 1000)
     }
 }
@@ -63,8 +62,10 @@ Echo.private('quiz.flow')
                 setQuestionEndTimer();
             }
         })
-
-    })
+    }).listen('QuestionClosed', (e) => {
+    console.log("Question closed !");
+    router.reload({only: ['question']});
+});
 </script>
 
 <template>
@@ -77,8 +78,8 @@ Echo.private('quiz.flow')
                         {{ quiz.id }}{{ admin ? ' - admin' : '' }}
                     </div>
                     <div class="bg-white p-12 rounded-lg shadow-lg w-full mt-8">
-<!--                        <pre>Remaining seconds : {{ remainingSeconds }}</pre>-->
-<!--                        <pre>question finished : {{ questionFinished }}</pre>-->
+                        <!--                        <pre>Remaining seconds : {{ remainingSeconds }}</pre>-->
+                        <!--                        <pre>question finished : {{ questionFinished }}</pre>-->
                         <QuizQuestion :question="question"
                                       :remainingSeconds="remainingSeconds"
                                       :questionFinished="questionFinished"/>
