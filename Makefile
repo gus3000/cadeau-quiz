@@ -2,6 +2,8 @@ DOCKER_PROD = docker compose -f docker-compose-production.yml
 DOCKER_PROD_PHP = $(DOCKER_PROD) exec php
 DOCKER_PROD_ARTISAN = $(DOCKER_PROD_PHP) php artisan
 
+deploy: prod-build prod-up
+
 prod-up:
 	$(DOCKER_PROD) up php nginx mysql --build -d
 
