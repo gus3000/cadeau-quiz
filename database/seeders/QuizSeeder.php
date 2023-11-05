@@ -16,25 +16,24 @@ class QuizSeeder extends Seeder
         $user = User::whereName('castless')->first();
 
         $quiz = Quiz::factory()->create([
-            'name' => 'Ennemis de JV (beta)',
+            'name' => 'Ennemis de JV',
             'short_name' => 'ennemis_jv',
             'created_by' => $user->id,
-            'opened_at' => new \DateTime(),
+            'opened_at' => new \DateTime('yesterday'),
             'finished' => true,
         ]);
 
         $this->importCsv($quiz);
 
         $quiz = Quiz::factory()->create([
-            'name' => 'Ennemis de JV',
-            'short_name' => 'ennemis_jv',
+            'name' => 'Culture informatique',
+            'short_name' => 'informatique',
             'created_by' => $user->id,
-            'opened_at' => new \DateTime(),
+            'opened_at' => null,
             'finished' => false,
         ]);
 
         $this->importCsv($quiz);
-//        $quiz->current_question = Question::whereQuizId($quiz->id)->orderBy('order')->first()->id;
         $quiz->save();
     }
 

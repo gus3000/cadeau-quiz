@@ -22,12 +22,12 @@ function setQuestionEndTimer() {
     console.log("remaining :", rem);
     if (rem && rem > 0) {
         // console.log("setting timer to", rem)
-        const showStatsTimeout = setTimeout(function () {
-            // router.reload({only: ['question']});
-        }, (rem + Durations.TIME_TO_WAIT_BEFORE_STATS) * 1000)
-        const hideClockTimeout = setTimeout(() => {
-            console.log("question finished !");
-        }, rem * 1000)
+        // const showStatsTimeout = setTimeout(function () {
+        //     // router.reload({only: ['question']});
+        // }, (rem + Durations.TIME_TO_WAIT_BEFORE_STATS) * 1000)
+        // const hideClockTimeout = setTimeout(() => {
+        //     console.log("question finished !");
+        // }, rem * 1000)
     }
 }
 

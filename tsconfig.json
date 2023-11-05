@@ -3,14 +3,15 @@
     "include": [
         "resources/**/*.ts",
         "resources/**/*.d.ts",
-        "resources/**/*.vue"
+        "resources/**/*.vue",
     ],
     "compilerOptions": {
         "allowJs": true,
         "strict": false,
         "baseUrl": ".",
         "paths": {
-            "@/*": ["resources/js/*"]
+            "@/*": ["resources/js/*"],
+            "@heroicons/*": ["node_modules/@heroicons/*"],
         },
         "types": [
             "vite/client"

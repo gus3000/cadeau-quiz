@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $created_by
  * @property string $name
  * @property string $short_name
+ * @property string|null $logo_url
  * @property int $finished
  * @property \App\Models\Question|null $current_question
  * @property-read bool $is_open
@@ -36,6 +37,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereFinished($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereLogoUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereOpenedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereShortName($value)
@@ -55,6 +57,7 @@ class Quiz extends Model
     public static function currentlyOpen(): ?Quiz
     {
         return self::whereFinished(false)
+            ->whereNotNull('opened_at')
             ->orderByDesc('opened_at')
             ->first();
     }

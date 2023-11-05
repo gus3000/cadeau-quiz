@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class, 'created_by')->constrained('users');
             $table->string('name');
             $table->string('short_name');
+            $table->string('logo_url')->nullable();
             $table->boolean('finished')->default(false);
         });
     }

@@ -13,6 +13,6 @@ export interface TQuestion {
     /** ⚠ UTC */
     opened_at: Date,
     correct_answer: ?TAnswer,
-    answers: Array[TAnswer],
+    answers: TAnswer[],
     time_remaining_with_grace_period: float,
 }
