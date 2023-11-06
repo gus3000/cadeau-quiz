@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreQuizRequest;
 use App\Http\Requests\UpdateQuizRequest;
+use App\Models\Answer;
+use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -41,7 +43,7 @@ class QuizController extends Controller
     {
 //        $b = $request->get();
         $validated = $request->validate([
-            'test' => 'required'
+            'name' => 'required|unique:quizzes'
         ]);
     }
 
@@ -67,10 +69,15 @@ class QuizController extends Controller
     public function edit(Quiz $quiz)
     {
         $user = Auth::user();
-        if (!$user->admin && !$user->id === $quiz->created_by)
+        if (!$user->admin && $user->id !== $quiz->created_by)
             abort(403, "Vous n'êtes pas autorisé à modifier ce quiz");
 
         $quiz->load('questions.answers');
+        $quiz->questions->each(function(Question $question) {
+            $question->answers->each(function(Answer $answer) {
+                $answer->makeVisible('correct');
+            });
+        });
 
         return Inertia::render('Dashboard/QuizEdit', [
             'quiz' => $quiz
@@ -83,6 +90,7 @@ class QuizController extends Controller
     public function update(UpdateQuizRequest $request, Quiz $quiz)
     {
         //
+        die('update');
     }
 
     /**
@@ -90,6 +98,6 @@ class QuizController extends Controller
      */
     public function destroy(Quiz $quiz)
     {
-        //
+        die('destroy');
     }
 }

@@ -3,7 +3,7 @@ Un moteur de quiz, fait pour le streameur [cadeauAnthony](https://www.twitch.tv/
 Lui dites pas, c'est une surprise !
 
 # A faire
-- affichage des scores de la question quand la question est finie
+- affichage des scores de la question quand la question est finie (https://flowbite.com/docs/plugins/charts/)
 - interface admin
 - écran d'affichage des scores globaux avec classement
 

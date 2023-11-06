@@ -47,7 +47,7 @@ class QuizSeeder extends Seeder
             $questionData = array_combine($keys, $row);
             $questionData['quiz_id'] = $quiz->id;
             $questionData['closed'] = $quiz->finished;
-            $questionData['order'] = $index;
+            $questionData['order'] = $index + 1;
 
             $correct_answer = $questionData['answer'];
             $answers = [
