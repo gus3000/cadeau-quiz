@@ -28,9 +28,6 @@ defineProps({
             class="mt-1 block w-full"
             :model-value="modelValue"
             @input="$emit('update:modelValue', $event.target.value)"
-            required
-            autofocus
-            autocomplete="name"
         />
       </div>
     </div>
