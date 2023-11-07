@@ -16,7 +16,7 @@ use phpDocumentor\Reflection\Types\Boolean;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $question_id
  * @property string $text
- * @property int $correct
+ * @property bool $correct
  * @property int $order
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Guess> $guesses
  * @property-read int|null $guesses_count
@@ -37,6 +37,10 @@ use phpDocumentor\Reflection\Types\Boolean;
 class Answer extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'text'
+    ];
 
     protected $hidden = [
         'correct'

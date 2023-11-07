@@ -58,6 +58,11 @@ class Question extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'text',
+        'duration',
+    ];
+
     protected $casts = [
         'opened_at' => 'datetime'
     ];

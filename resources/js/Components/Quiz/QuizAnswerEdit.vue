@@ -18,15 +18,20 @@ const label = computed(() => {
 
 const labelColor = computed(() => {
   if(props.answer.correct)
-    return 'green';
-  return 'red';
+    return ['text-green-400', 'peer-placeholder-shown:text-green-400/75'];
+  return ['text-red-400', 'peer-placeholder-shown:text-red-400/75'];
 });
 </script>
 
 <template>
 
   <div class="md:flex items-center mt-4 mb-2 px-4 md:gap-5">
-    <FloatingLabeledTextInput :label="label" :label-color="labelColor" v-model="answer.text" class="w-full"/>
+    <FloatingLabeledTextInput
+        :label="label"
+        :label-color="labelColor"
+        v-model="answer.text"
+        class="w-full"
+    />
 
 <!--    <LabeledTextInput :label="label" v-model="answer.text" />-->
   </div>

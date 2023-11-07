@@ -7,14 +7,17 @@ use App\Http\Requests\UpdateQuizRequest;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Quiz;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Services\ModelHandlers\Quiz\QuizUpdateService;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class QuizController extends Controller
 {
+    public function __construct(
+        protected QuizUpdateService $quizUpdateService,
+    )
+    {
+    }
 
     /**
      * Display a listing of the resource.
@@ -43,8 +46,10 @@ class QuizController extends Controller
     {
 //        $b = $request->get();
         $validated = $request->validate([
-            'name' => 'required|unique:quizzes'
+//            'name' => 'required|unique:quizzes'
         ]);
+
+
     }
 
     /**
@@ -89,8 +94,7 @@ class QuizController extends Controller
      */
     public function update(UpdateQuizRequest $request, Quiz $quiz)
     {
-        //
-        die('update');
+        $this->quizUpdateService->updateQuiz($quiz, $request->all());
     }
 
     /**

@@ -9,23 +9,27 @@ import type {TAnswer} from "@/Model/TAnswer";
 import QuizAnswerEdit from "@/Components/Quiz/QuizAnswerEdit.vue";
 
 const props = defineProps<{
-  question: TQuestion
+    question: TQuestion
 }>();
 
+function correctAnswers(): TAnswer[] {
+    return props.question.answers.filter((answer) => answer.correct);
+}
+
 function incorrectAnswers(): TAnswer[] {
-  return props.question.answers.filter((answer) => !answer.correct);
+    return props.question.answers.filter((answer) => !answer.correct);
 }
 
 </script>
 
 <template>
-  <div>
-    <div class="block text-gray-500 dark:text-gray-300 font-bold m-5 pr-4">Question {{ question.order }}</div>
-    <LabeledTextInput label="Énoncé" v-model="question.text"/>
-    <QuizAnswerEdit v-for="answer in [question.correct_answer, ...incorrectAnswers()]"
-                    :answer="answer"
-    />
-  </div>
+    <div>
+        <div class="block text-gray-500 dark:text-gray-300 font-bold m-5 pr-4">Question {{ question.order }}</div>
+        <LabeledTextInput label="Énoncé" v-model="question.text"/>
+        <QuizAnswerEdit v-for="answer in [...correctAnswers(), ...incorrectAnswers()]"
+                        :answer="answer"
+        />
+    </div>
 </template>
 
 <style scoped>

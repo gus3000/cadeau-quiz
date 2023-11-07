@@ -51,6 +51,12 @@ class Quiz extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'short_name',
+        'logo_url',
+    ];
+
     const CLIENT_GRACE_PERIOD_SECONDS = 3.0;
     const SERVER_GRACE_PERIOD_SECONDS = 1.0; // on top of client grace period
 
