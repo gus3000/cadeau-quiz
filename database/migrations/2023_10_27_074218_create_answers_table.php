@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignIdFor(\App\Models\Question::class)->constrained();
-            $table->string('text');
+            $table->string('text')->nullable();
             $table->boolean('correct');
             $table->integer('order');
             $table->unique(['question_id', 'order']);
