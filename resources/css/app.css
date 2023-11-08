@@ -32,11 +32,7 @@
     }
 
     .themed-icon {
-        @apply text-blue-500
-    }
-
-    .cadeau-text {
-
+        @apply text-blue-500;
     }
 
     .cadeau-highlight-red {

@@ -61,6 +61,7 @@ class Question extends Model
     protected $fillable = [
         'text',
         'duration',
+        'order',
     ];
 
     protected $casts = [
