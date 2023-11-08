@@ -19,7 +19,10 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'twitch_id' => fake()->unique()->numberBetween(-1000000, -1),
+            'twitch_avatar' => fake()->imageUrl(),
             'remember_token' => Str::random(10),
+
         ];
     }
 

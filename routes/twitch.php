@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Http\Request;
@@ -20,9 +21,12 @@ Route::prefix('twitch')->group(function () {
             ->setScopes([])
             ->user();
 
-        $user = \App\Models\User::updateOrCreate([
+        $user = User::updateOrCreate([
             'name' => $twitchUser->getName(),
         ]);
+        $user->twitch_id = $twitchUser->getId();
+        $user->twitch_avatar = $twitchUser->getAvatar();
+        $user->save();
 
         Auth::login($user);
 

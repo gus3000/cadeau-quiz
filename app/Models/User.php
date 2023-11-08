@@ -13,6 +13,8 @@ use Laravel\Sanctum\HasApiTokens;
  *
  * @property int $id
  * @property string $name
+ * @property string $twitch_id
+ * @property string $twitch_avatar
  * @property int $admin
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -32,6 +34,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereTwitchAvatar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereTwitchId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */

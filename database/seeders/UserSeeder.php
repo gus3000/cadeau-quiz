@@ -11,17 +11,17 @@ class UserSeeder extends Seeder
     {
         User::factory()->create([
             'name' => 'admin',
-            'admin' => true
+            'admin' => true,
         ]);
 
         User::factory()->create([
             'name' => 'castless',
-            'admin' => true
+            'admin' => true,
         ]);
 
         User::factory()->create([
             'name' => 'cadeauJeff',
-            'admin' => false
+            'admin' => false,
         ]);
     }
 }

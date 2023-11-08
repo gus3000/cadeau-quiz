@@ -78,6 +78,11 @@ Route::prefix('user')
             return $guesses->get();
         });
 
+        Route::get('/twitch/profile', function() {
+            $user = Auth::user();
+
+        });
+
         Route::get('/guess/{question}', [GuessController::class, 'getGuess']);
 
         Route::put('/guess/{question}/{answer}', [GuessController::class, 'updateGuess']);

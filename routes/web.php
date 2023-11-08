@@ -1,15 +1,11 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizController;
-use App\Models\Guess;
-use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,11 +18,16 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
-Route::get('/phpinfo', function () {
-    if (App::isProduction())
-        abort(403);
-    return phpinfo();
-});
+Route::prefix('debug')
+    ->group(function () {
+        Route::get('/', \App\Http\Controllers\DebugController::class);
+        Route::get('/phpinfo', function () {
+            if (App::isProduction())
+                abort(403);
+            return phpinfo();
+        });
+    });
+
 
 Route::get('/', function () {
     if (!Auth::check()) {
