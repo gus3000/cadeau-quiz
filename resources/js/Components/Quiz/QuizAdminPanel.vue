@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type {PropType} from "vue/dist/vue";
+import {PropType} from "vue";
 import type {TQuestion} from "@/Model/TQuestion";
 import type {TQuiz} from "@/Model/TQuiz";
 

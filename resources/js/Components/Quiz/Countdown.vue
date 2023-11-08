@@ -6,12 +6,11 @@ import {DateTime} from "luxon";
 import type {TQuestion} from "@/Model/TQuestion";
 import {restartAnimation} from "@/Services/Animation";
 
-const props = defineProps({
-    // question: Object as PropType<TQuestion>
-    total: Number,
-    remaining: Number,
-    questionFinished: Boolean,
-});
+const props = defineProps<{
+    total: number,
+    remaining: number,
+    questionFinished: boolean,
+}>();
 
 let dynamicRemaining = props.remaining ?? 0;
 
@@ -44,11 +43,13 @@ onBeforeUnmount(() => {
 watch(() => props.questionFinished, async (finished, oldFinished) => {
     if (!finished) {
         let clockHand = document.getElementById('clock-hand');
+        if(clockHand === null)
+            return;
         restartAnimation(clockHand, 'rotating');
     }
 });
 
-watch(() => props.remaining, async (remaining) => {
+watch(() => props.remaining, async (remaining: number) => {
     dynamicRemaining = remaining;
 });
 </script>

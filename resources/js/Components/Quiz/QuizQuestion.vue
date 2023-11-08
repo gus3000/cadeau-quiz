@@ -25,15 +25,18 @@ function answerClass(answer: TAnswer) {
 }
 
 const props = defineProps({
-    question: Object as PropType<TQuestion>,
+    question: {
+        type: Object as PropType<TQuestion>,
+        required: true,
+    },
     guess: Object as PropType<TGuess>,
     questionFinished: Boolean,
 });
 
 watch(() => props.question?.id, (newId, oldId) => {
     if (newId !== oldId) {
-        document.getElementsByName(`question-answer-${oldId}`).forEach((input) => {
-            input.checked = false;
+        document.getElementsByName(`question-answer-${oldId}`).forEach((input: HTMLElement) => {
+            (input as HTMLInputElement).checked = false;
         })
     }
 });

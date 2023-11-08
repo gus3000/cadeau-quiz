@@ -17,7 +17,7 @@ const props = defineProps<{
 let isDirty = ref(false);
 
 function submit() {
-  axios.put(route("quizzes.update", props.quiz), props.quiz);
+  axios.put(route("quizzes.update", props.quiz as any), props.quiz);
 }
 
 const debounceSubmit = debounce(function () {
@@ -91,6 +91,7 @@ function moveDown(question: TQuestion): void {
           :question="question"
           @move-up="moveUp"
           @move-down="moveDown"
+          :total-number-of-questions="quiz.questions.length"
       />
 
       <div></div>

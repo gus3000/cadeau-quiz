@@ -24,14 +24,13 @@ const labelColor = computed(() => {
 </script>
 
 <template>
-
   <div class="md:flex items-center mt-4 mb-2 px-4 md:gap-5">
     <FloatingLabeledTextInput
         :label="label"
         :label-color="labelColor"
         v-model="answer.text"
         class="w-full"
-    />
+        error=""/>
 
 <!--    <LabeledTextInput :label="label" v-model="answer.text" />-->
   </div>

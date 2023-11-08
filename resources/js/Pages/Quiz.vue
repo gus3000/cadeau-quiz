@@ -6,8 +6,7 @@ import {computed, type PropType} from "vue";
 import QuizQuestion from "@/Components/Quiz/QuizQuestion.vue";
 import type {TQuestion} from "@/Model/TQuestion";
 import QuizAdminPanel from "@/Components/Quiz/QuizAdminPanel.vue";
-import {DateTime} from "luxon";
-import {Durations} from "@/Constants";
+import {TGuess} from "@/Model/TGuess";
 
 const props = defineProps({
     quiz: Object as PropType<TQuiz>,
@@ -41,7 +40,7 @@ const questionFinished = computed(() => {
 setQuestionEndTimer();
 
 Echo.private('quiz.flow')
-    .listen('NextQuestion', (e) => {
+    .listen('NextQuestion', (e:any) => {
         console.log("NEXT QUESTION", e);
         // console.log("question id before :", props.question?.id);
         router.reload({
@@ -51,7 +50,7 @@ Echo.private('quiz.flow')
             }
         })
     })
-    .listen('QuestionClosed', (e) => {
+    .listen('QuestionClosed', () => {
         console.log("Question closed !");
         router.reload({only: ['question', 'guess']});
     });
@@ -63,8 +62,8 @@ Echo.private('quiz.flow')
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">{{ quiz.name }} -
-                        {{ quiz.id }}{{ admin ? ' - admin' : '' }}
+                    <div class="p-6 text-gray-900 dark:text-gray-100">{{ quiz?.name }} -
+                        {{ quiz?.id }}{{ admin ? ' - admin' : '' }}
                     </div>
                     <div class="bg-white p-12 rounded-lg shadow-lg w-full mt-8">
                         <!--                        <pre>Remaining seconds : {{ remainingSeconds }}</pre>-->

@@ -4,8 +4,8 @@
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
-import {computed} from "vue";
-import {  v4 as uuidv4 } from 'uuid'
+import {computed, PropType} from "vue";
+import {v4 as uuidv4} from 'uuid'
 
 const props = defineProps({
     label: {
@@ -13,7 +13,7 @@ const props = defineProps({
         required: true,
     },
     labelColor: {
-        type: Array[String],
+        type: Array as PropType<string[]>,
         default: ['text-gray-400', 'peer-placeholder-shown:text-gray-300'],
     },
     error: String,

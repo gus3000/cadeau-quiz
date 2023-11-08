@@ -10,7 +10,9 @@ declare global {
 
     var route: typeof ziggyRoute;
     var Ziggy: ZiggyConfig;
+    var Pusher: Pusher;
     var Echo: Echo;
+    var axios: AxiosInstance;
 }
 
 declare module 'vue' {
