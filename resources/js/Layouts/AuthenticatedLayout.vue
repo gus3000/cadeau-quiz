@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from 'vue';
+import {ref} from 'vue';
 import ApplicationLogo from '@/Components/Logo/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import {Link} from '@inertiajs/vue3';
 import {DASHBOARD_ROUTES} from "@/Constants";
 
 const showingNavigationDropdown = ref(false);
@@ -33,7 +33,7 @@ const showingNavigationDropdown = ref(false);
                                 v-for="r in DASHBOARD_ROUTES"
                                 class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route(r.name)" :active="route().current(r.name)">
-                                    {{r.label}}
+                                    {{ r.label }}
                                 </NavLink>
                             </div>
                         </div>
@@ -48,7 +48,8 @@ const showingNavigationDropdown = ref(false);
                                                 type="button"
                                                 class="inline-flex items-center gap-3 px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
                                             >
-                                                <img class="w-10 h-10 rounded-full" :src="$page.props.auth.user.twitch_avatar" alt="Rounded avatar">
+                                                <img class="w-10 h-10 rounded-full"
+                                                     :src="$page.props.auth.user.twitch_avatar" alt="Rounded avatar">
 
                                                 {{ $page.props.auth.user.name }}
 
@@ -116,8 +117,11 @@ const showingNavigationDropdown = ref(false);
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Historique
+                        <ResponsiveNavLink
+                            v-for="r in DASHBOARD_ROUTES"
+                            :href="route(r.name)"
+                            :active="route().current(r.name)">
+                            {{ r.label }}
                         </ResponsiveNavLink>
                     </div>
 
@@ -142,13 +146,13 @@ const showingNavigationDropdown = ref(false);
             <!-- Page Heading -->
             <header class="bg-white dark:bg-gray-800 shadow" v-if="$slots.header">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <slot name="header" />
+                    <slot name="header"/>
                 </div>
             </header>
 
             <!-- Page Content -->
             <main>
-                <slot />
+                <slot/>
             </main>
         </div>
     </div>

@@ -3,7 +3,8 @@ import type {TQuestion} from "@/Model/TQuestion";
 import LabeledTextInput from "@/Components/LabeledTextInput.vue";
 import type {TAnswer} from "@/Model/TAnswer";
 import QuizAnswerEdit from "@/Components/Quiz/QuizAnswerEdit.vue";
-
+import {AngleDownIcon, AngleUpIcon} from "flowbite-vue-icons";
+import IconButton from "@/Components/Button/IconButton.vue";
 
 
 const props = defineProps<{
@@ -26,12 +27,17 @@ function incorrectAnswers(): TAnswer[] {
         <div class="flex flex-fill justify-between items-center">
             <div class="block text-gray-500 dark:text-gray-300 font-bold m-5 pr-4">Question {{ question.order }}</div>
             <div class="px-4 flex gap-2">
-                <button class="btn btn-neutral p-2" @click="$emit('moveUp', question)"
-                        :disabled="question.order <= 1">
-                </button>
-                <button class="btn btn-neutral p-2" @click="$emit('moveDown', question)">
-                    <!--                    <AngleDown class="h-3"/>-->
-                </button>
+
+                <IconButton :icon-name="AngleUpIcon"
+                            :solid="false"
+                            @click="$emit('moveUp', question)"
+                            :disabled="question.order <= 1"/>
+
+                <IconButton :icon-name="AngleDownIcon"
+                            :solid="false"
+                            @click="$emit('moveDown', question)"
+                            :disabled="question.order >= totalNumberOfQuestions"/>
+
             </div>
         </div>
 
