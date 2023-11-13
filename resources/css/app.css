@@ -8,11 +8,11 @@
     }
 
     .btn-neutral {
-        @apply bg-gray-500 text-white;
+        @apply bg-gray-500 text-white disabled:opacity-25;
     }
 
     .btn-neutral:hover {
-        @apply bg-gray-700;
+        @apply bg-gray-700 disabled:bg-gray-500 ;
     }
 
     .radio-label-neutral {

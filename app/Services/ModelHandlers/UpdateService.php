@@ -36,6 +36,7 @@ abstract class UpdateService
     {
         $allowedAttributes = $this->filterFillable($attributes);
 
+        $model->updateTimestamps();
         $model->update($allowedAttributes);
     }
 

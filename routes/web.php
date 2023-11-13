@@ -61,7 +61,7 @@ Route::get('/', function () {
 })
     ->name('home');
 
-Route::middleware(['auth', 'verified', 'quiz_redirect'])
+Route::middleware(['auth', 'quiz_redirect'])
     ->prefix('dashboard')
     ->group(function () {
         Route::get("/", function () {
@@ -69,7 +69,8 @@ Route::middleware(['auth', 'verified', 'quiz_redirect'])
         })->name('dashboard');
     });
 
-Route::resource('quizzes', QuizController::class);
+Route::middleware('auth')
+    ->resource('quizzes', QuizController::class);
 
 
 Route::middleware(['auth'])

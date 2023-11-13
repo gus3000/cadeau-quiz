@@ -32,6 +32,7 @@
         "@heroicons/vue": "^2.0.18",
         "flowbite": "^2.0.0",
         "flowbite-vue-icons": "^0.5",
-        "uuid": "^9.0.1"
+        "uuid": "^9.0.1",
+        "vuedraggable": "^4.1.0"
     }
 }
