@@ -95,6 +95,7 @@ class QuizController extends Controller
     public function update(UpdateQuizRequest $request, Quiz $quiz)
     {
         $this->quizUpdateService->updateQuiz($quiz, $request->all());
+        return $quiz->load('questions.answers');
     }
 
     /**

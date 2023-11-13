@@ -6,7 +6,7 @@ defineProps({
         required: true,
     },
     iconName: {
-        type: String,
+        type: Object,
         required: true,
     },
     disabled: {
