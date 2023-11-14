@@ -3,12 +3,10 @@
 import DashboardLayout from "@/Layouts/DashboardLayout.vue";
 import {router, Link} from '@inertiajs/vue3'
 import type {TQuiz} from "@/Model/TQuiz";
-import QuizQuestionEdit from "@/Components/Quiz/QuizQuestionEdit.vue";
 
 const props = defineProps<{
     quiz: TQuiz
 }>();
-
 </script>
 
 <template>

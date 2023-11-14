@@ -105,7 +105,6 @@ onMounted(() => {
     setInterval(() => {
         updateFormattedLastUpdate();
     }, 1000);
-    initFlowbite();
     normalizeOrders();
 
     watch(props.quiz, async () => {

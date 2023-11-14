@@ -6,10 +6,12 @@ import type {TQuiz} from "@/Model/TQuiz";
 import IconButton from "@/Components/Button/IconButton.vue";
 import {PlusIcon} from "flowbite-vue-icons";
 import { Link } from '@inertiajs/vue3';
+import {onMounted} from "vue";
+import {initFlowbite} from "flowbite";
 
 const props = defineProps<{
     quizzes: TQuiz[]
-}>()
+}>();
 </script>
 
 <template>
