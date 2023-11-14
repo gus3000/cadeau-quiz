@@ -16,7 +16,7 @@ use phpDocumentor\Reflection\Types\Boolean;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $deleted_at
  * @property int $question_id
- * @property string|null $text
+ * @property string $text
  * @property bool $correct
  * @property int $order
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Guess> $guesses

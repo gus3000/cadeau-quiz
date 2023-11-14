@@ -33,7 +33,7 @@ class QuestionApiController extends Controller
         $question = Question::create([
             'quiz_id' => $request->get('quiz_id'),
             'order' => $request->get('order'),
-            'text' => $request->get('text'),
+            'text' => $request->get('text') ?? '',
         ]);
 
         Answer::create([
