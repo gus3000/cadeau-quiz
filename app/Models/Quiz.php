@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $logo_url
  * @property int $default_duration
  * @property int $default_number_of_answers
+ * @property int $locked
  * @property int $finished
  * @property \App\Models\Question|null $current_question
  * @property-read bool $is_open
@@ -42,6 +43,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereFinished($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereLocked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereLogoUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereOpenedAt($value)

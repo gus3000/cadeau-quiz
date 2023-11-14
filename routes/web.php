@@ -69,7 +69,7 @@ Route::middleware(['auth', 'quiz_redirect'])
         })->name('dashboard');
     });
 
-Route::middleware('auth')
+Route::middleware(['auth', 'quiz_owner', 'quiz_not_locked'])
     ->resource('quizzes', QuizController::class);
 
 

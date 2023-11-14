@@ -24,8 +24,8 @@ defineProps({
 </script>
 
 <template>
-    <button class="btn btn-neutral p-2 flex items-center gap-3" :disabled="disabled">
-        <Component :is="iconName" class="w-4 h-4"/>
+    <button type="button" class="btn btn-neutral p-2 flex items-center gap-3" :disabled="disabled">
+        <Component :is="iconName" :solid="solid" class="w-4 h-4 fill-white"/>
         <span v-if="text">{{text}}</span>
     </button>
 </template>

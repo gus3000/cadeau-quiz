@@ -1,20 +1,25 @@
 <script setup lang="ts">
 
 import DashboardLayout from "@/Layouts/DashboardLayout.vue";
-import {computed, onMounted, Ref, ref, watch} from 'vue';
+import {computed, nextTick, onMounted, Ref, ref, watch} from 'vue';
 import type {TQuiz} from "@/Model/TQuiz";
 import QuizQuestionEdit from "@/Components/Quiz/QuizQuestionEdit.vue";
 import LabeledTextInput from "@/Components/Input/LabeledTextInput.vue";
 import axios from "axios";
 import {debounce} from "@/Services/Debounce";
 import type {TQuestion} from "@/Model/TQuestion";
-import {CheckIcon, PlusIcon} from "flowbite-vue-icons";
+import {CheckIcon, CloudArrowUpIcon, MailBoxIcon, PlusIcon} from "flowbite-vue-icons";
 import SizedIcon from "@/Components/SizedIcon.vue";
 import Spinner from "@/Components/Icon/Spinner.vue";
 import {DateTime} from "luxon";
 import {initFlowbite} from "flowbite";
 import IconButton from "@/Components/Button/IconButton.vue";
 import LabeledIntInput from "@/Components/Input/LabeledIntInput.vue";
+import Modal from "@/Components/Modal.vue";
+import {router} from "@inertiajs/vue3";
+import Text from "@/Components/Text.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import LabelButton from "@/Components/Button/LabelButton.vue";
 
 
 const props = defineProps<{
@@ -52,6 +57,13 @@ const orderedQuestions = computed(
         return props.quiz.questions.sort((a, b) => a.order - b.order);
     }
 );
+
+const confirmingQuizLock = ref(false);
+const confirmQuizLock = () => {
+    confirmingQuizLock.value = true;
+
+    // nextTick(() => passwordInput.value.focus());
+};
 
 function normalizeOrders() {
     for (let [i, question] of props.quiz.questions.entries()) {
@@ -100,6 +112,16 @@ function deleteQuestion(question: TQuestion): void {
     axios.delete(route('questions.destroy', question as any));
     normalizeOrders();
 }
+
+function lockQuiz(): void {
+    axios.post(route("api.quizzes.lock", props.quiz as any)).then(() => {
+        router.visit(route('quizzes.index'))
+    });
+}
+
+const closeModal = () => {
+    confirmingQuizLock.value = false;
+};
 
 onMounted(() => {
     setInterval(() => {
@@ -172,6 +194,19 @@ onMounted(() => {
             <div class="flex flex-fill justify-center items-center py-4">
                 <IconButton :icon-name="PlusIcon" text="Ajouter une question" @click="addQuestion()"/>
             </div>
+
+            <div class="flex flex-fill justify-center items-center py-4">
+                <IconButton :icon-name="CloudArrowUpIcon" text="Soumettre le quiz" @click="confirmQuizLock"/>
+            </div>
+            <Modal :show="confirmingQuizLock" @close="closeModal">
+                <div class="p-6">
+                    <Text>Voulez-vous envoyer le quiz à Antho ?</Text>
+                    <Text>Le quiz sera verrouillé et vous ne pourrez plus le modifier.</Text>
+                    <div class="flex flex-fill justify-center items-center py-4">
+                        <LabelButton text="Envoyer le quiz" @click="lockQuiz"/>
+                    </div>
+                </div>
+            </Modal>
             <!-- Draggable version, not finished but would be nice to have -->
             <!--      <draggable-->
             <!--          tag="transition-group"-->
@@ -193,7 +228,7 @@ onMounted(() => {
             <!--        </template>-->
             <!--      </draggable>-->
 
-            <div></div>
+
         </form>
     </DashboardLayout>
 </template>

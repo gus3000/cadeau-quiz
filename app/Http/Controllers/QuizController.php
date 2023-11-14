@@ -79,10 +79,6 @@ class QuizController extends Controller
      */
     public function edit(Quiz $quiz)
     {
-        $user = Auth::user();
-        if (!$user->admin && $user->id !== $quiz->created_by)
-            abort(403, "Vous n'êtes pas autorisé à modifier ce quiz");
-
         $quiz->load('questions.answers');
         $quiz->questions->each(function(Question $question) {
             $question->answers->each(function(Answer $answer) {

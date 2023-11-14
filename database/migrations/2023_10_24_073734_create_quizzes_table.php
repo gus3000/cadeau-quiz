@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('logo_url')->nullable();
             $table->integer('default_duration')->default(10);
             $table->integer('default_number_of_answers')->default(4);
+            $table->boolean('locked')->default(false);
             $table->boolean('finished')->default(false);
         });
     }

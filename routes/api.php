@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\QuestionApiController;
+use App\Http\Controllers\Api\QuizApiController;
 use App\Http\Controllers\GuessController;
 use App\Http\Controllers\QuizController;
-use App\Models\Answer;
 use App\Models\Guess;
 use App\Models\Question;
 use App\Models\Quiz;
@@ -34,23 +34,28 @@ Route::prefix('quiz')->group(function () {
         return $quiz->questions;
     });
 
-    Route::middleware(['web', 'auth:sanctum', 'admin'])->group(function () {
-        Route::get('/{quiz}/open', function (Quiz $quiz) {
-            $quiz->open();
-            return $quiz;
-        });
+    Route::middleware(['web', 'auth:sanctum', 'quiz_owner'])->group(function () {
 
-        Route::get('/{quiz}/close', function (Quiz $quiz) {
-            $quiz->close();
-            return $quiz;
-        });
+        Route::post('/{quiz}/lock', [QuizApiController::class, 'lock'])->name("api.quizzes.lock");
 
-        Route::post('/next-question', function () {
-            Quiz::currentlyOpen()->nextQuestion();
-        });
+        Route::middleware('admin')->group(function () {
+            Route::get('/{quiz}/open', function (Quiz $quiz) {
+                $quiz->open();
+                return $quiz;
+            });
 
-        Route::post('/close-question', function () {
-            Quiz::currentlyOpen()->current_question->close();
+            Route::get('/{quiz}/close', function (Quiz $quiz) {
+                $quiz->close();
+                return $quiz;
+            });
+
+            Route::post('/next-question', function () {
+                Quiz::currentlyOpen()->nextQuestion();
+            });
+
+            Route::post('/close-question', function () {
+                Quiz::currentlyOpen()->current_question->close();
+            });
         });
     });
 });
@@ -63,7 +68,7 @@ Route::prefix('question')->group(function () {
     });
 
     Route::get('/{question}/guesses', function (Question $question) {
-        if($question->is_open)
+        if ($question->is_open)
             abort(401, 'La question est encore ouverte, vous ne pouvez pas récuperer les réponses');
         return Guess::whereQuestionId($question->id);
     });
@@ -82,7 +87,7 @@ Route::prefix('user')
             return $guesses->get();
         });
 
-        Route::get('/twitch/profile', function() {
+        Route::get('/twitch/profile', function () {
             $user = Auth::user();
 
         });

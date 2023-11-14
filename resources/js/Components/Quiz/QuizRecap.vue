@@ -24,7 +24,7 @@ const props = defineProps<{
             </p>
         </div>
         <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-            <div v-if="quiz.finished">
+            <div v-if="quiz.locked">
                 <button
                     class="h-6 w-6"
                     data-tooltip-target="tooltip-locked"

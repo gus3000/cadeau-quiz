@@ -9,6 +9,10 @@ import {Link} from '@inertiajs/vue3';
 import {DASHBOARD_ROUTES} from "@/Constants";
 import {initFlowbite} from "flowbite";
 
+function allowed_dashboard_routes() {
+
+}
+
 const showingNavigationDropdown = ref(false);
 onMounted(() => initFlowbite());
 </script>

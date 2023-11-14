@@ -3,6 +3,8 @@
 namespace App\Http;
 
 use App\Http\Middleware\Admin;
+use App\Http\Middleware\IsQuizOwner;
+use App\Http\Middleware\QuizNotLocked;
 use App\Http\Middleware\QuizRedirect;
 use App\Http\Middleware\Twitch;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -84,5 +86,7 @@ class Kernel extends HttpKernel
 
         'admin' => Admin::class,
         'quiz_redirect' => QuizRedirect::class,
+        'quiz_owner' => IsQuizOwner::class,
+        'quiz_not_locked' => QuizNotLocked::class,
     ];
 }
