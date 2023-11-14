@@ -13,7 +13,7 @@ class UpdateQuizRequest extends QuizRequest
     public function authorize(): bool
     {
         $quizId = $this->get('id');
-        $quiz = Quiz::find($quizId)->first();
+        $quiz = Quiz::find($quizId);
         $user = $this->user();
 
         return $user->id === $quiz->created_by || $user->is_admin;
