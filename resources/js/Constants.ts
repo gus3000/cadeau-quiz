@@ -11,9 +11,11 @@ export const DASHBOARD_ROUTES = [ //TODO change this to a better location
         name: 'quizzes.index',
         label: 'Mes quiz'
     },
-    // {
-    //     name: 'quizzes.others',
-    //     label: 'Quiz proposés'
-    // }
-
 ];
+
+export const DASHBOARD_ADMIN_ROUTES = [
+    {
+        name: 'quizzes.submitted',
+        label: 'Quiz proposés'
+    }
+]

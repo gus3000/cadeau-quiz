@@ -69,6 +69,9 @@ Route::middleware(['auth', 'quiz_redirect'])
         })->name('dashboard');
     });
 
+Route::middleware(['auth', 'admin'])
+    ->get('quizzes/submitted', [QuizController::class, 'submitted'])->name('quizzes.submitted');
+
 Route::middleware(['auth', 'quiz_owner', 'quiz_not_locked'])
     ->resource('quizzes', QuizController::class);
 

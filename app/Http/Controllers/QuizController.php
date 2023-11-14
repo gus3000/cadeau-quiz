@@ -58,6 +58,18 @@ class QuizController extends Controller
 
     }
 
+    public function submitted()
+    {
+        $quizzes = Quiz::where([
+            'locked' => true,
+            'finished' => false,
+        ])->get();
+
+        return Inertia::render('Dashboard/SubmittedQuizzes', [
+            'quizzes' => $quizzes,
+        ]);
+    }
+
     /**
      * Display the specified resource.
      */
@@ -80,8 +92,8 @@ class QuizController extends Controller
     public function edit(Quiz $quiz)
     {
         $quiz->load('questions.answers');
-        $quiz->questions->each(function(Question $question) {
-            $question->answers->each(function(Answer $answer) {
+        $quiz->questions->each(function (Question $question) {
+            $question->answers->each(function (Answer $answer) {
                 $answer->makeVisible('correct');
             });
         });

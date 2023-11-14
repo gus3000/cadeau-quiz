@@ -5,12 +5,17 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import {Link} from '@inertiajs/vue3';
-import {DASHBOARD_ROUTES} from "@/Constants";
+import {Link, usePage} from '@inertiajs/vue3';
+import {DASHBOARD_ADMIN_ROUTES, DASHBOARD_ROUTES} from "@/Constants";
 import {initFlowbite} from "flowbite";
 
+const page = usePage();
 function allowed_dashboard_routes() {
-
+    const user = page.props.auth.user;
+    if(user.admin) {
+        return DASHBOARD_ROUTES.concat(DASHBOARD_ADMIN_ROUTES);
+    }
+    return DASHBOARD_ROUTES;
 }
 
 const showingNavigationDropdown = ref(false);
@@ -36,7 +41,7 @@ onMounted(() => initFlowbite());
 
                             <!-- Navigation Links -->
                             <div
-                                v-for="r in DASHBOARD_ROUTES"
+                                v-for="r in allowed_dashboard_routes()"
                                 class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route(r.name)" :active="route().current(r.name)">
                                     {{ r.label }}
@@ -124,7 +129,7 @@ onMounted(() => initFlowbite());
                 >
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
-                            v-for="r in DASHBOARD_ROUTES"
+                            v-for="r in allowed_dashboard_routes()"
                             :href="route(r.name)"
                             :active="route().current(r.name)">
                             {{ r.label }}
