@@ -10,6 +10,8 @@ export interface TQuiz {
     name: string,
     short_name: string,
     logo_url: string,
+    default_duration: number,
+    default_number_of_answers: number,
     finished: boolean,
     questions: TQuestion[],
 }

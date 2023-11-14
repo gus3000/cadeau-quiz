@@ -17,7 +17,6 @@ class QuizSeeder extends Seeder
 
         $quiz = Quiz::factory()->create([
             'name' => 'Ennemis de JV',
-            'short_name' => 'ennemis_jv',
             'created_by' => $user->id,
             'opened_at' => new \DateTime('yesterday'),
             'finished' => true,
@@ -27,7 +26,6 @@ class QuizSeeder extends Seeder
 
         $quiz = Quiz::factory()->create([
             'name' => 'Culture informatique',
-            'short_name' => 'informatique',
             'created_by' => $user->id,
             'opened_at' => null,
             'finished' => false,
@@ -39,8 +37,8 @@ class QuizSeeder extends Seeder
 
     private function importCsv(Quiz $quiz): void
     {
-        $shortName = $quiz->short_name;
-        $csv = array_map("str_getcsv", file("database/data/questions/$shortName.csv", FILE_SKIP_EMPTY_LINES));
+        $name = $quiz->name;
+        $csv = array_map("str_getcsv", file("database/data/questions/$name.csv", FILE_SKIP_EMPTY_LINES));
         $keys = array_shift($csv);
 
         foreach ($csv as $index => $row) {

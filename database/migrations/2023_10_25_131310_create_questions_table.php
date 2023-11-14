@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->timestamp('opened_at')->nullable();
             $table->foreignIdFor(Quiz::class)->constrained();
             $table->string('text');
-            $table->float('duration')->default(10);
+            $table->float('duration')->nullable();
             $table->boolean('closed')->default(false);
             $table->integer('order');
         });

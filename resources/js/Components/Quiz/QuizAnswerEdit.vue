@@ -1,10 +1,8 @@
 <script setup lang="ts">
 
 import type {TAnswer} from "@/Model/TAnswer";
-import TextInput from "@/Components/TextInput.vue";
-import LabeledTextInput from "@/Components/LabeledTextInput.vue";
 import {computed} from "vue";
-import FloatingLabeledTextInput from "@/Components/FloatingLabeledTextInput.vue";
+import FloatingLabeledTextInput from "@/Components/Input/FloatingLabeledTextInput.vue";
 
 const props = defineProps<{
   answer: TAnswer
@@ -31,8 +29,6 @@ const labelColor = computed(() => {
         v-model="answer.text"
         class="w-full"
         error=""/>
-
-<!--    <LabeledTextInput :label="label" v-model="answer.text" />-->
   </div>
 </template>
 

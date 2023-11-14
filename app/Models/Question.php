@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Events\QuestionClosed;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,12 +21,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $opened_at
  * @property int $quiz_id
  * @property string $text
- * @property float $duration
+ * @property int $duration
  * @property int $closed
  * @property int $order
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Answer> $answers
  * @property-read int|null $answers_count
- * @property-read \App\Models\Answer $correct_answer
+ * @property-read \App\Models\Answer|null $correct_answer
  * @property-read bool $finished
  * @property-read bool $is_open
  * @property-read float|null $time_remaining
@@ -59,6 +58,7 @@ class Question extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'quiz_id',
         'text',
         'duration',
         'order',
@@ -93,7 +93,7 @@ class Question extends Model
         return $this->belongsTo(Quiz::class);
     }
 
-    public function getCorrectAnswerAttribute(): Answer
+    public function getCorrectAnswerAttribute(): ?Answer
     {
         return $this->answers
             ->where('correct', '=', true)
@@ -110,7 +110,8 @@ class Question extends Model
         $this->attributes['closed'] = $closed;
     }
 
-    public function getTimeRemainingAttribute(): float|null {
+    public function getTimeRemainingAttribute(): float|null
+    {
         if (is_null($this->opened_at))
             return null;
 
@@ -133,9 +134,16 @@ class Question extends Model
         return max(0, $cappedRemaining);
     }
 
+    public function getDurationAttribute(): int
+    {
+        if (!is_null($this->attributes['duration']))
+            return $this->attributes['duration'];
+        return $this->quiz->default_duration;
+    }
+
     public function guessFromUser(User $user): ?Guess
     {
-        $answerIds = $this->answers->map(fn ($answer) => $answer->id);
+        $answerIds = $this->answers->map(fn($answer) => $answer->id);
 
         return Guess::whereUserId($user->id)
             ->whereIn('answer_id', $answerIds)
@@ -151,4 +159,9 @@ class Question extends Model
     {
         return $this->hasOne(Media::class);
     }
+
+//    public function createdBy(): BelongsTo
+//    {
+//        return $this->hasOneThrough(User::class, Quiz::class, 'created_by');
+//    }
 }

@@ -22,11 +22,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $name
  * @property string $short_name
  * @property string|null $logo_url
+ * @property int $default_duration
+ * @property int $default_number_of_answers
  * @property int $finished
  * @property \App\Models\Question|null $current_question
  * @property-read bool $is_open
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Question> $questions
  * @property-read int|null $questions_count
+ * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\QuizFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz newQuery()
@@ -34,6 +37,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz query()
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereDefaultDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereDefaultNumberOfAnswers($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereFinished($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereId($value)
@@ -55,7 +60,10 @@ class Quiz extends Model
         'name',
         'short_name',
         'logo_url',
+        'default_duration',
+        'default_number_of_answers'
     ];
+
 
     const CLIENT_GRACE_PERIOD_SECONDS = 3.0;
     const SERVER_GRACE_PERIOD_SECONDS = 1.0; // on top of client grace period
@@ -113,6 +121,10 @@ class Quiz extends Model
     public function questions(): HasMany
     {
         return $this->hasMany(Question::class)->orderBy('order');
+    }
+
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class, "id", "created_by");
     }
 
     public function setCurrentQuestionAttribute(?Question $question): void

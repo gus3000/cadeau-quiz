@@ -14,6 +14,7 @@ use phpDocumentor\Reflection\Types\Boolean;
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
  * @property int $question_id
  * @property string|null $text
  * @property bool $correct
@@ -27,6 +28,7 @@ use phpDocumentor\Reflection\Types\Boolean;
  * @method static \Illuminate\Database\Eloquent\Builder|Answer query()
  * @method static \Illuminate\Database\Eloquent\Builder|Answer whereCorrect($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Answer whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Answer whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Answer whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Answer whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Answer whereQuestionId($value)
@@ -39,7 +41,10 @@ class Answer extends Model
     use HasFactory;
 
     protected $fillable = [
-        'text'
+        'question_id',
+        'text',
+        'correct',
+        'order',
     ];
 
     protected $hidden = [

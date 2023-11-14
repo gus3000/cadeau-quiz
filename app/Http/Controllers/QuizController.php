@@ -36,7 +36,13 @@ class QuizController extends Controller
      */
     public function create()
     {
-        //
+        $user = Auth::user();
+        $quiz = Quiz::factory()->create([
+            'created_by' => $user->id,
+            'name' => '',
+        ]);
+
+        return to_route('quizzes.edit', $quiz);
     }
 
     /**

@@ -18,11 +18,6 @@ class QuestionFactory extends Factory
     {
         return [
             'text' => fake()->text(),
-            'answer' => fake()->text(20),
-            'false_proposition1' => fake()->text(20),
-            'false_proposition2' => fake()->text(20),
-            'false_proposition3' => fake()->text(20),
-
         ];
     }
 }

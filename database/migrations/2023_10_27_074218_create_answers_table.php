@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
             $table->foreignIdFor(\App\Models\Question::class)->constrained();
             $table->string('text')->nullable();
             $table->boolean('correct');

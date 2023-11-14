@@ -4,18 +4,22 @@ import DashboardLayout from "@/Layouts/DashboardLayout.vue";
 import {computed, onMounted, Ref, ref, watch} from 'vue';
 import type {TQuiz} from "@/Model/TQuiz";
 import QuizQuestionEdit from "@/Components/Quiz/QuizQuestionEdit.vue";
-import LabeledTextInput from "@/Components/LabeledTextInput.vue";
+import LabeledTextInput from "@/Components/Input/LabeledTextInput.vue";
 import axios from "axios";
 import {debounce} from "@/Services/Debounce";
 import type {TQuestion} from "@/Model/TQuestion";
-import {ArrowDownToBracketIcon, CheckIcon} from "flowbite-vue-icons";
+import {CheckIcon, PlusIcon} from "flowbite-vue-icons";
 import SizedIcon from "@/Components/SizedIcon.vue";
 import Spinner from "@/Components/Icon/Spinner.vue";
 import {DateTime} from "luxon";
+import {initFlowbite} from "flowbite";
+import IconButton from "@/Components/Button/IconButton.vue";
+import LabeledIntInput from "@/Components/Input/LabeledIntInput.vue";
+
 
 const props = defineProps<{
     quiz: TQuiz,
-    errors: TQuiz,
+    errors: any,
 }>();
 
 let isDirty = ref(false);
@@ -49,12 +53,6 @@ const orderedQuestions = computed(
     }
 );
 
-watch(props.quiz, async () => {
-    isDirty.value = true;
-    console.log('watcher triggered');
-    debounceSubmit();
-});
-
 function normalizeOrders() {
     for (let [i, question] of props.quiz.questions.entries()) {
         question.order = i + 1;
@@ -83,10 +81,38 @@ function moveDown(question: TQuestion): void {
     exchangeQuestions(question.order, question.order + 1);
 }
 
+function addQuestion(): void {
+    let questionRaw = {
+        created_at: DateTime.now(),
+        quiz_id: props.quiz.id,
+        order: props.quiz.questions.length + 1,
+        text: '',
+    }
+    axios.get(route('questions.create'), {params: questionRaw}).then((response) => {
+        props.quiz.questions.push(response.data);
+    });
+}
+
+function deleteQuestion(question: TQuestion): void {
+    // console.log("deleting question", question);
+    const i = props.quiz.questions.indexOf(question);
+    props.quiz.questions.splice(i, 1);
+    axios.delete(route('questions.destroy', question as any));
+    normalizeOrders();
+}
+
 onMounted(() => {
     setInterval(() => {
         updateFormattedLastUpdate();
     }, 1000);
+    initFlowbite();
+    normalizeOrders();
+
+    watch(props.quiz, async () => {
+        isDirty.value = true;
+        console.log('watcher triggered');
+        debounceSubmit();
+    });
 });
 </script>
 
@@ -95,7 +121,6 @@ onMounted(() => {
         <template v-slot:title>
             <div class="flex flex-row items-center gap-3">
                 <span>{{ quiz.name }}</span>
-<!--                <SizedIcon :solid="true" :icon-name="ArrowDownToBracketIcon"/>-->
                 <Spinner v-show="isDirty"/>
                 <div v-show="!isDirty">
                     <div data-tooltip-target="tooltip-saved">
@@ -104,7 +129,8 @@ onMounted(() => {
                             :solid="true"
                         />
                     </div>
-                    <div id="tooltip-saved" role="tooltip" class="cadeau-tooltip">
+                    <div id="tooltip-saved" role="tooltip"
+                         class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                         Dernière sauvegarde automatique {{ formattedLastUpdate }}
                         <div class="tooltip-arrow" data-popper-arrow></div>
                     </div>
@@ -122,6 +148,16 @@ onMounted(() => {
                     :error="errors.name"
                     label="Nom"
                 />
+                <LabeledIntInput
+                    v-model.number="quiz.default_duration"
+                    name="quiz.default_duration"
+                    :error="errors.default_duration"
+                    label="Durée par défaut d'une question"/>
+                <LabeledIntInput
+                    v-model.number="quiz.default_number_of_answers"
+                    name="quiz.default_number_of_answers"
+                    :error="errors.default_number_of_answers"
+                    label="Nombre de réponses par défaut"/>
                 <input type="hidden" v-model="quiz.updated_at"/>
             </div>
 
@@ -130,8 +166,13 @@ onMounted(() => {
                 :question="question"
                 @move-up="moveUp"
                 @move-down="moveDown"
+                @delete="deleteQuestion"
                 :total-number-of-questions="quiz.questions.length"
             />
+
+            <div class="flex flex-fill justify-center items-center py-4">
+                <IconButton :icon-name="PlusIcon" text="Ajouter une question" @click="addQuestion()"/>
+            </div>
             <!-- Draggable version, not finished but would be nice to have -->
             <!--      <draggable-->
             <!--          tag="transition-group"-->

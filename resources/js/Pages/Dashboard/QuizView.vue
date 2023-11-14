@@ -14,7 +14,7 @@ const props = defineProps<{
 <template>
     <DashboardLayout :title="quiz.name">
         <Link :href="route('quizzes.edit', quiz as any)" class="btn btn-neutral">Modifier</Link>
-<!--                <QuizQuestionEdit v-for="question in quiz.questions" :question="question"/>-->
+<!--                <QuizQuestionView v-for="question in quiz.questions" :question="question"/>-->
     </DashboardLayout>
 </template>
 

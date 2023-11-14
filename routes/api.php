@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\QuestionApiController;
 use App\Http\Controllers\GuessController;
+use App\Http\Controllers\QuizController;
 use App\Models\Answer;
 use App\Models\Guess;
 use App\Models\Question;
@@ -52,6 +54,8 @@ Route::prefix('quiz')->group(function () {
         });
     });
 });
+
+Route::resource('questions', QuestionApiController::class);
 
 Route::prefix('question')->group(function () {
     Route::get('/{question}/quiz', function (Question $question) {

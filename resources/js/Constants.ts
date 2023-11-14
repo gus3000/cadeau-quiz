@@ -5,7 +5,7 @@ export const Durations = {
 export const DASHBOARD_ROUTES = [ //TODO change this to a better location
     {
         name: 'dashboard',
-        label: 'Historique'
+        label: 'Statistiques'
     },
     {
         name: 'quizzes.index',

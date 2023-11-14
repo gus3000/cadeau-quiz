@@ -1,9 +1,7 @@
 <script setup lang="ts">
 
 
-import InputLabel from "@/Components/InputLabel.vue";
-import TextInput from "@/Components/TextInput.vue";
-import InputError from "@/Components/InputError.vue";
+import TextInput from "@/Components/Input/TextInput.vue";
 import {computed, PropType} from "vue";
 import {v4 as uuidv4} from 'uuid'
 
