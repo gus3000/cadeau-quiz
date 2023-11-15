@@ -63,7 +63,7 @@ Echo.private('quiz.flow')
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">{{ quiz?.name }} -
-                        {{ quiz?.id }}{{ admin ? ' - admin' : '' }}
+                        {{ quiz?.id }}
                     </div>
                     <div class="bg-white p-12 rounded-lg shadow-lg w-full mt-8">
                         <!--                        <pre>Remaining seconds : {{ remainingSeconds }}</pre>-->

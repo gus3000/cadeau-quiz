@@ -2,11 +2,13 @@
 import type {TQuiz} from "@/Model/TQuiz";
 
 import {LockClosedIcon, PencilSquareIcon} from "@heroicons/vue/24/outline";
-import {Link} from "@inertiajs/vue3";
+import {Link, usePage} from "@inertiajs/vue3";
 
 const props = defineProps<{
     quiz: TQuiz
 }>();
+
+const page = usePage();
 </script>
 
 <template>
@@ -24,7 +26,7 @@ const props = defineProps<{
             </p>
         </div>
         <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-            <div v-if="quiz.locked">
+            <div v-if="quiz.locked && !page.props.auth.user.admin">
                 <button
                     class="h-6 w-6"
                     data-tooltip-target="tooltip-locked"

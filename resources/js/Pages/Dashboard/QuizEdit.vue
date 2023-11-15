@@ -1,24 +1,22 @@
 <script setup lang="ts">
 
 import DashboardLayout from "@/Layouts/DashboardLayout.vue";
-import {computed, nextTick, onMounted, Ref, ref, watch} from 'vue';
+import {computed, onMounted, Ref, ref, watch} from 'vue';
 import type {TQuiz} from "@/Model/TQuiz";
 import QuizQuestionEdit from "@/Components/Quiz/QuizQuestionEdit.vue";
 import LabeledTextInput from "@/Components/Input/LabeledTextInput.vue";
 import axios from "axios";
 import {debounce} from "@/Services/Debounce";
 import type {TQuestion} from "@/Model/TQuestion";
-import {CheckIcon, CloudArrowUpIcon, MailBoxIcon, PlusIcon} from "flowbite-vue-icons";
+import {ArrowRightFromBracketIcon, CheckIcon, CloudArrowUpIcon, PlusIcon} from "flowbite-vue-icons";
 import SizedIcon from "@/Components/SizedIcon.vue";
 import Spinner from "@/Components/Icon/Spinner.vue";
 import {DateTime} from "luxon";
-import {initFlowbite} from "flowbite";
 import IconButton from "@/Components/Button/IconButton.vue";
 import LabeledIntInput from "@/Components/Input/LabeledIntInput.vue";
 import Modal from "@/Components/Modal.vue";
 import {router} from "@inertiajs/vue3";
 import Text from "@/Components/Text.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import LabelButton from "@/Components/Button/LabelButton.vue";
 
 
@@ -61,9 +59,12 @@ const orderedQuestions = computed(
 const confirmingQuizLock = ref(false);
 const confirmQuizLock = () => {
     confirmingQuizLock.value = true;
-
-    // nextTick(() => passwordInput.value.focus());
 };
+
+const confirmingQuizLaunch = ref(false);
+const confirmQuizLaunch = () => {
+    confirmingQuizLaunch.value = true;
+}
 
 function normalizeOrders() {
     for (let [i, question] of props.quiz.questions.entries()) {
@@ -119,9 +120,19 @@ function lockQuiz(): void {
     });
 }
 
-const closeModal = () => {
+function launchQuiz(): void {
+    axios.get(route("api.quiz.open", props.quiz as any)).then(() => {
+        router.visit(route('home'));
+    });
+}
+
+const closeModalQuizLock = () => {
     confirmingQuizLock.value = false;
 };
+
+const closeModalQuizLaunch = () => {
+    confirmingQuizLaunch.value = false;
+}
 
 onMounted(() => {
     setInterval(() => {
@@ -195,18 +206,33 @@ onMounted(() => {
                 <IconButton :icon-name="PlusIcon" text="Ajouter une question" @click="addQuestion()"/>
             </div>
 
-            <div class="flex flex-fill justify-center items-center py-4">
-                <IconButton :icon-name="CloudArrowUpIcon" text="Soumettre le quiz" @click="confirmQuizLock"/>
-            </div>
-            <Modal :show="confirmingQuizLock" @close="closeModal">
-                <div class="p-6">
-                    <Text>Voulez-vous envoyer le quiz à Antho ?</Text>
-                    <Text>Le quiz sera verrouillé et vous ne pourrez plus le modifier.</Text>
-                    <div class="flex flex-fill justify-center items-center py-4">
-                        <LabelButton text="Envoyer le quiz" @click="lockQuiz"/>
-                    </div>
+            <template v-if="!$page.props.auth.user.admin">
+                <div class="flex flex-fill justify-center items-center py-4">
+                    <IconButton :icon-name="CloudArrowUpIcon" text="Soumettre le quiz" @click="confirmQuizLock"/>
                 </div>
-            </Modal>
+                <Modal :show="confirmingQuizLock" @close="closeModalQuizLock">
+                    <div class="p-6">
+                        <Text>Voulez-vous envoyer le quiz à Antho ?</Text>
+                        <Text>Le quiz sera verrouillé et vous ne pourrez plus le modifier.</Text>
+                        <div class="flex flex-fill justify-center items-center py-4">
+                            <LabelButton text="Envoyer le quiz" @click="lockQuiz"/>
+                        </div>
+                    </div>
+                </Modal>
+            </template>
+            <template v-else>
+                <div class="flex flex-fill justify-center items-center py-4">
+                    <IconButton :icon-name="ArrowRightFromBracketIcon" text="Lancer ce quiz" @click="confirmQuizLaunch"/>
+                </div>
+                <Modal :show="confirmingQuizLaunch" @close="closeModalQuizLaunch">
+                    <div class="p-6">
+                        <Text>Voulez-vous lancer ce quiz ?</Text>
+                        <div class="flex flex-fill justify-center items-center py-4">
+                            <LabelButton text="Lancer ce quiz" @click="launchQuiz"/>
+                        </div>
+                    </div>
+                </Modal>
+            </template>
             <!-- Draggable version, not finished but would be nice to have -->
             <!--      <draggable-->
             <!--          tag="transition-group"-->

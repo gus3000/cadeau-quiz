@@ -18,7 +18,7 @@ class QuizNotLocked
     {
         /** @var Quiz $quiz */
         $quiz = $request->route()->parameter('quiz');
-        if ($quiz !== null && $quiz->locked)
+        if ($quiz !== null && $quiz->locked && !\Auth::user()->is_admin)
             abort(403, "Ce quiz est verrouillé, vous ne pouvez plus le modifier");
 
         return $next($request);

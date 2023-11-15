@@ -87,6 +87,7 @@ class Quiz extends Model
     {
         $this->opened_at = \Date::now();
         $this->finished = false;
+        $this->save();
     }
 
     public function close(): void

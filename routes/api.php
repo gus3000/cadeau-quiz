@@ -42,7 +42,7 @@ Route::prefix('quiz')->group(function () {
             Route::get('/{quiz}/open', function (Quiz $quiz) {
                 $quiz->open();
                 return $quiz;
-            });
+            })->name("api.quiz.open");
 
             Route::get('/{quiz}/close', function (Quiz $quiz) {
                 $quiz->close();

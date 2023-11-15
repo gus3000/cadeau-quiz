@@ -5,6 +5,10 @@ defineProps({
         type: String,
         required: true,
     },
+    disabled: {
+        type: Boolean,
+        default: false,
+    }
 });
 </script>
 
