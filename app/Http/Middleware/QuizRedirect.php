@@ -18,7 +18,7 @@ class QuizRedirect
     {
         $quiz = Quiz::currentlyOpen();
         if($quiz) {
-            return redirect('quiz');
+            return to_route('home');
         }
         return $next($request);
     }

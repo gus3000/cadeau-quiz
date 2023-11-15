@@ -62,7 +62,7 @@ watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
 
     <p class="text-2xl font-bold">{{ question?.text ?? "Le quiz va bientôt commencer !" }}</p>
     <div v-if="questionFinished">Question terminée !</div>
-    <div v-if="question" class="text-xl">Question {{ question.order + 1 }}</div>
+    <div v-if="question" class="text-xl">Question {{ question.order }}</div>
     <ul>
         <li v-for="answer in question?.answers">
             <input

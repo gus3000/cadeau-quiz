@@ -6,33 +6,46 @@ use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class QuizSeeder extends Seeder
 {
     public function run(): void
     {
-        $user = User::whereName('castless')->first();
+        $adminUser = User::whereName('castless')->first();
+        $unprivilegedUser = User::whereName('cadeauJeff')->first();
 
-        $quiz = Quiz::factory()->create([
+        $quizzes = [];
+        $quizzes[] = Quiz::factory()->create([
             'name' => 'Ennemis de JV',
-            'created_by' => $user->id,
+            'created_by' => $adminUser->id,
             'opened_at' => new \DateTime('yesterday'),
+            'locked' => true,
             'finished' => true,
+            'closed' => true,
         ]);
 
-        $this->importCsv($quiz);
-
-        $quiz = Quiz::factory()->create([
+        $quizzes[] = Quiz::factory()->create([
             'name' => 'Culture informatique',
-            'created_by' => $user->id,
+            'created_by' => $adminUser->id,
             'opened_at' => null,
+            'locked' => true,
             'finished' => false,
         ]);
 
-        $this->importCsv($quiz);
-        $quiz->save();
+        $quizzes[] = Quiz::factory()->create([
+            'name' => 'Un quiz sur les patates',
+            'created_by' => $unprivilegedUser->id,
+            'opened_at' => null,
+            'locked' => true,
+            'finished' => false,
+        ]);
+
+        foreach ($quizzes as $quiz) {
+            $this->importCsv($quiz);
+            $quiz->save();
+        }
+
     }
 
     private function importCsv(Quiz $quiz): void

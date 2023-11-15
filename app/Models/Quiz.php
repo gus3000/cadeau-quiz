@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -26,6 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $default_number_of_answers
  * @property int $locked
  * @property int $finished
+ * @property int $closed
  * @property \App\Models\Question|null $current_question
  * @property-read bool $is_open
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Question> $questions
@@ -36,6 +36,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereClosed($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereCreatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereDefaultDuration($value)
@@ -72,7 +73,7 @@ class Quiz extends Model
 
     public static function currentlyOpen(): ?Quiz
     {
-        return self::whereFinished(false)
+        return self::whereClosed(false)
             ->whereNotNull('opened_at')
             ->orderByDesc('opened_at')
             ->first();
@@ -80,27 +81,29 @@ class Quiz extends Model
 
     public function getIsOpenAttribute(): bool
     {
-        return $this->opened_at !== null && !$this->finished;
+        return $this->opened_at !== null && !$this->closed;
     }
 
     public function open(): void
     {
         $this->opened_at = \Date::now();
         $this->finished = false;
+        $this->closed = false;
         $this->save();
     }
 
     public function close(): void
     {
-        $this->finished = true;
+        $this->closed = true;
+        $this->save();
     }
 
     public function nextQuestion(): void
     {
         $currentQuestion = $this->current_question;
-        if (is_null($currentQuestion)) {
+        if (is_null($currentQuestion) && !$this->finished) {
             $this->current_question = $this->questions->first();
-        } else {
+        } else if (!is_null($currentQuestion)) {
             $questions = $this->questions->getIterator();
             foreach ($questions as $question) {
                 if ($question->id === $currentQuestion->id)
@@ -114,10 +117,11 @@ class Quiz extends Model
         $this->save();
 
         $currentQuestion = $this->current_question;
+        if (!is_null($currentQuestion)) {
+            $currentQuestion->opened_at = new \DateTime();
+            $currentQuestion->save();
+        }
 
-//        $currentQuestion = Question::find($this->current_question);
-        $currentQuestion->opened_at = new \DateTime();
-        $currentQuestion->save();
         NextQuestion::dispatch();
     }
 
@@ -126,12 +130,18 @@ class Quiz extends Model
         return $this->hasMany(Question::class)->orderBy('order');
     }
 
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class, "id", "created_by");
     }
 
     public function setCurrentQuestionAttribute(?Question $question): void
     {
+        if (is_null($question)) {
+            $this->finished = true;
+            return;
+        }
+
         if ($question->quiz_id !== $this->id)
             throw new \Exception("cannot set current question to question {$question->id} with quiz_id {$question->quiz_id} on quiz {$this->id}");
 
@@ -141,6 +151,8 @@ class Quiz extends Model
 
     public function getCurrentQuestionAttribute(): ?Question
     {
+        if ($this->finished)
+            return null;
         return
             $this->questions->whereNotNull('opened_at')->last();
     }

@@ -47,14 +47,10 @@ Route::prefix('quiz')->group(function () {
             Route::get('/{quiz}/close', function (Quiz $quiz) {
                 $quiz->close();
                 return $quiz;
-            });
+            })->name('api.quiz.close');
 
             Route::post('/next-question', function () {
                 Quiz::currentlyOpen()->nextQuestion();
-            });
-
-            Route::post('/close-question', function () {
-                Quiz::currentlyOpen()->current_question->close();
             });
         });
     });

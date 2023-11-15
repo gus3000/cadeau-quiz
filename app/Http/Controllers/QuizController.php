@@ -60,10 +60,12 @@ class QuizController extends Controller
 
     public function submitted()
     {
+        $user = Auth::user();
         $quizzes = Quiz::where([
             'locked' => true,
             'finished' => false,
-        ])->get();
+        ])->whereNot('created_by', $user->id)
+            ->get();
 
         return Inertia::render('Dashboard/SubmittedQuizzes', [
             'quizzes' => $quizzes,

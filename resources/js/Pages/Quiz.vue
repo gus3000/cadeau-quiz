@@ -7,6 +7,8 @@ import QuizQuestion from "@/Components/Quiz/QuizQuestion.vue";
 import type {TQuestion} from "@/Model/TQuestion";
 import QuizAdminPanel from "@/Components/Quiz/QuizAdminPanel.vue";
 import {TGuess} from "@/Model/TGuess";
+import IconButton from "@/Components/Button/IconButton.vue";
+import {CloseCircleIcon} from "flowbite-vue-icons";
 
 const props = defineProps({
     quiz: Object as PropType<TQuiz>,
@@ -30,6 +32,12 @@ function setQuestionEndTimer() {
     }
 }
 
+function closeQuiz() {
+    axios.get(route('api.quiz.close', props.quiz as any)).then(() => {
+        router.reload();
+    })
+}
+
 const questionFinished = computed(() => {
     if (props.question === null || props.question === undefined)
         return false;
@@ -40,11 +48,11 @@ const questionFinished = computed(() => {
 setQuestionEndTimer();
 
 Echo.private('quiz.flow')
-    .listen('NextQuestion', (e:any) => {
+    .listen('NextQuestion', (e: any) => {
         console.log("NEXT QUESTION", e);
         // console.log("question id before :", props.question?.id);
         router.reload({
-            only: ['question'], onFinish: () => {
+            only: ['quiz', 'question'], onFinish: () => {
                 // console.log("question id after :", props.question.id);
                 setQuestionEndTimer();
             }
@@ -66,15 +74,20 @@ Echo.private('quiz.flow')
                         {{ quiz?.id }}
                     </div>
                     <div class="bg-white p-12 rounded-lg shadow-lg w-full mt-8">
-                        <!--                        <pre>Remaining seconds : {{ remainingSeconds }}</pre>-->
-                        <!--                        <pre>question finished : {{ questionFinished }}</pre>-->
                         <QuizQuestion
                             v-if="question"
                             :question="question"
                             :guess="guess"
                             :questionFinished="questionFinished"/>
+                        <div v-if="quiz?.finished">
+                            Quiz terminé !
+                            Prochainement, des stats !
+                            <div class="flex flex-fill justify-center items-center py-4">
+                                <IconButton :icon-name="CloseCircleIcon" text="Fermer le quiz" @click="closeQuiz"/>
+                            </div>
+                        </div>
                         <QuizAdminPanel
-                            v-if="admin"
+                            v-if="!quiz?.finished && admin"
                             :quiz="quiz"
                             :question="question"
                             :question-finished="questionFinished"

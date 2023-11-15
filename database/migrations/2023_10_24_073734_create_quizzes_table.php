@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('default_number_of_answers')->default(4);
             $table->boolean('locked')->default(false);
             $table->boolean('finished')->default(false);
+            $table->boolean('closed')->default(false);
         });
     }
 

@@ -41,8 +41,8 @@ Route::get('/', function () {
     $user = Auth::user();
     $quiz = Quiz::currentlyOpen();
     if ($quiz === null)
-
         return redirect('dashboard');
+
     $question = $quiz->current_question;
     $question?->load('answers');
 
