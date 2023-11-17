@@ -9,6 +9,7 @@ import QuizAdminPanel from "@/Components/Quiz/QuizAdminPanel.vue";
 import {TGuess} from "@/Model/TGuess";
 import IconButton from "@/Components/Button/IconButton.vue";
 import {CloseCircleIcon} from "flowbite-vue-icons";
+import QuizComponent from "@/Components/Quiz/QuizComponent.vue";
 
 const props = defineProps({
     quiz: Object as PropType<TQuiz>,
@@ -32,12 +33,6 @@ function setQuestionEndTimer() {
     }
 }
 
-function closeQuiz() {
-    axios.get(route('api.quiz.close', props.quiz as any)).then(() => {
-        router.reload();
-    })
-}
-
 const questionFinished = computed(() => {
     if (props.question === null || props.question === undefined)
         return false;
@@ -47,56 +42,24 @@ const questionFinished = computed(() => {
 
 setQuestionEndTimer();
 
-Echo.private('quiz.flow')
-    .listen('NextQuestion', (e: any) => {
-        console.log("NEXT QUESTION", e);
-        // console.log("question id before :", props.question?.id);
-        router.reload({
-            only: ['quiz', 'question'], onFinish: () => {
-                // console.log("question id after :", props.question.id);
-                setQuestionEndTimer();
-            }
-        })
-    })
-    .listen('QuestionClosed', () => {
-        console.log("Question closed !");
-        router.reload({only: ['question', 'guess']});
-    });
+
 </script>
 
 <template>
     <Head title="Quiz"/>
     <AuthenticatedLayout>
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">{{ quiz?.name }} -
-                        {{ quiz?.id }}
-                    </div>
-                    <div class="bg-white p-12 rounded-lg shadow-lg w-full mt-8">
-                        <QuizQuestion
-                            v-if="question"
-                            :question="question"
-                            :guess="guess"
-                            :questionFinished="questionFinished"/>
-                        <div v-if="quiz?.finished">
-                            Quiz terminé !
-                            Prochainement, des stats !
-                            <div class="flex flex-fill justify-center items-center py-4">
-                                <IconButton :icon-name="CloseCircleIcon" text="Fermer le quiz" @click="closeQuiz"/>
-                            </div>
-                        </div>
-                        <QuizAdminPanel
-                            v-if="!quiz?.finished && admin"
-                            :quiz="quiz"
-                            :question="question"
-                            :question-finished="questionFinished"
-                        />
-                    </div>
-
-                </div>
-            </div>
-        </div>
+        <QuizComponent
+            :quiz="quiz"
+            :question="question"
+            :guess="guess"
+            :question-finished="questionFinished"
+            />
+        <QuizAdminPanel
+            v-if="!quiz?.finished && admin"
+            :quiz="quiz"
+            :question="question"
+            :question-finished="questionFinished"
+        />
     </AuthenticatedLayout>
 </template>
 

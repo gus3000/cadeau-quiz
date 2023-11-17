@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\Api\QuestionApiController;
 use App\Http\Controllers\Api\QuizApiController;
+use App\Http\Controllers\Api\TwitchApiController;
 use App\Http\Controllers\GuessController;
-use App\Http\Controllers\QuizController;
 use App\Models\Guess;
 use App\Models\Question;
 use App\Models\Quiz;
@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('quiz')->group(function () {
     Route::get('/current', function () {
-        return Quiz::currentlyOpen();
+        return Quiz::currentlyOpen() ?? ['message' => 'no current quiz'];
     });
 
     Route::get('/{quiz}', function (Quiz $quiz) {
@@ -70,8 +70,13 @@ Route::prefix('question')->group(function () {
     });
 });
 
+Route::prefix('twitch')
+    ->group(function () {
+        Route::get('/validate', [TwitchApiController::class, 'validateToken']);
+        Route::get('/test-user', [TwitchApiController::class, 'testUser']);
+    });
+
 Route::prefix('user')
-    ->middleware(['web', 'auth:sanctum'])
     ->group(function () {
         Route::get('/', function (Request $request) {
             return $request->user();

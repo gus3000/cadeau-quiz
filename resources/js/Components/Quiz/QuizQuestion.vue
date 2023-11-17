@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import {computed, type PropType, watch} from "vue";
+import {type PropType, watch} from "vue";
 import type {TQuestion} from "@/Model/TQuestion";
-import {router} from "@inertiajs/vue3";
 import type {TAnswer} from "@/Model/TAnswer";
 import axios from "axios";
 import Countdown from "@/Components/Quiz/Countdown.vue";
@@ -30,6 +29,7 @@ const props = defineProps({
         required: true,
     },
     guess: Object as PropType<TGuess>,
+    overlay: Boolean,
     questionFinished: Boolean,
 });
 
@@ -52,37 +52,40 @@ watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
 </script>
 
 <template>
-    <Transition name="bounce">
+    <div>
+        <Transition name="bounce">
 
-        <Countdown v-show="!questionFinished"
-                   :total="question?.duration"
-                   :remaining="question?.time_remaining_with_grace_period"
-                   :question-finished="questionFinished"/>
-    </Transition>
+            <Countdown v-show="!questionFinished"
+                       :total="question?.duration"
+                       :remaining="question?.time_remaining_with_grace_period"
+                       :question-finished="questionFinished"/>
+        </Transition>
 
-    <p class="text-2xl font-bold">{{ question?.text ?? "Le quiz va bientôt commencer !" }}</p>
-    <div v-if="questionFinished">Question terminée !</div>
-    <div v-if="question" class="text-xl">Question {{ question.order }}</div>
-    <ul>
-        <li v-for="answer in question?.answers">
-            <input
-                :id="`answer-${answer.id}`"
-                :name="`question-answer-${question.id}`"
-                class="hidden peer"
-                type="radio"
-                @change="selectAnswer(answer)"
-                :disabled="questionFinished"
-            />
-            <label
-                :for="`answer-${answer.id}`"
-                class="block mt-4 border border-gray-300 grounded-lg py-2 px-6 text-lg rounded-lg cursor-pointer
-                 "
-                :class="answerClass(answer)"
+        <p class="text-2xl font-bold my-1">{{ question?.text ?? "Le quiz va bientôt commencer !" }}</p>
+        <div v-if="questionFinished">Question terminée !</div>
+        <div v-if="question" class="text-xl sm:hidden">Question {{ question.order }}</div>
+        <ul class="grid grid-cols-2 place-items-stretch gap-2">
+            <li v-for="answer in question?.answers"
+            class="flex flex-1 w-full justify-center items-center"
             >
-                {{ answer.text }}
-            </label>
-        </li>
-    </ul>
+                <input
+                    :id="`answer-${answer.id}`"
+                    :name="`question-answer-${question.id}`"
+                    class="hidden peer"
+                    type="radio"
+                    @change="selectAnswer(answer)"
+                    :disabled="questionFinished"
+                />
+                <label
+                    :for="`answer-${answer.id}`"
+                    class="grow block border border-gray-300 grounded-lg py-2 px-6 text-lg rounded-lg cursor-pointer text-center"
+                    :class="answerClass(answer)"
+                >
+                    {{ answer.text }}
+                </label>
+            </li>
+        </ul>
+    </div>
 
 </template>
 

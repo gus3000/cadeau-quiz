@@ -2,10 +2,19 @@
 import {PropType} from "vue";
 import type {TQuestion} from "@/Model/TQuestion";
 import type {TQuiz} from "@/Model/TQuiz";
+import {CloseCircleIcon} from "flowbite-vue-icons";
+import IconButton from "@/Components/Button/IconButton.vue";
+import {router} from "@inertiajs/vue3";
 
 
 function nextQuestion() {
     axios.post(`/api/quiz/next-question`);
+}
+
+function closeQuiz() {
+    axios.get(route('api.quiz.close', props.quiz as any)).then(() => {
+        router.reload();
+    })
 }
 
 defineProps({
@@ -38,6 +47,9 @@ defineProps({
         >
             Question suivante
         </button>
+        <div v-if="quiz?.finished" class="flex flex-fill justify-center items-center py-4">
+            <IconButton :icon-name="CloseCircleIcon" text="Fermer le quiz" @click="closeQuiz"/>
+        </div>
     </div>
 </template>
 

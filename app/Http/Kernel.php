@@ -7,9 +7,8 @@ use App\Http\Middleware\IsQuizOwner;
 use App\Http\Middleware\QuizNotLocked;
 use App\Http\Middleware\QuizRedirect;
 use App\Http\Middleware\Twitch;
+use App\Http\Middleware\TwitchJwtAuth;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use Laravel\Sanctum\Http\Middleware\AuthenticateSession;
-use Laravel\Sanctum\Sanctum;
 
 class Kernel extends HttpKernel
 {
@@ -51,6 +50,10 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            TwitchJwtAuth::class,
         ],
 
         'twitch' => [
@@ -88,5 +91,6 @@ class Kernel extends HttpKernel
         'quiz_redirect' => QuizRedirect::class,
         'quiz_owner' => IsQuizOwner::class,
         'quiz_not_locked' => QuizNotLocked::class,
+        'twitch_jwt' => TwitchJwtAuth::class,
     ];
 }

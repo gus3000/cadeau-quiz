@@ -18,4 +18,5 @@
     <body class="font-sans antialiased">
         @inertia
     </body>
+    <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
 </html>

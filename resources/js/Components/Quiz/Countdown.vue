@@ -55,7 +55,7 @@ watch(() => props.remaining, async (remaining: number) => {
 </script>
 
 <template>
-    <div class="flex justify-center py-10 group">
+    <div class="flex justify-center lg:py-10 sm:py-2 group">
         <div class="flex flex-col align-center items-center">
             <div class="relative flex items-center justify-end w-20 h-20 overflow-hidden rounded-full"
                  :class="[

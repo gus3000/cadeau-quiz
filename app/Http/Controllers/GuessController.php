@@ -31,20 +31,20 @@ class GuessController extends Controller
             'user_id' => $user->id,
         ];
 
-        $guess = $question->guessFromUser($user);
-
-        if (is_null($guess)) {
-            return Guess::factory()->create(array_merge($baseGuessAttributes, [
-                'answer_id' => $answer->id,
-            ]));
-        }
-
         if ($question->finished) {
             abort(401, 'La question est close, vous ne pouvez plus changer votre réponse');
         }
 
         if (is_null($question->opened_at)) {
             abort(401, 'La question n\'est pas encore ouverte, vous ne pouvez pas encore voter');
+        }
+
+        $guess = $question->guessFromUser($user);
+
+        if (is_null($guess)) {
+            return Guess::factory()->create(array_merge($baseGuessAttributes, [
+                'answer_id' => $answer->id,
+            ]));
         }
 
         $quiz = $question->quiz;

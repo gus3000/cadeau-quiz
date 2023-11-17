@@ -84,4 +84,5 @@ Route::middleware(['auth'])
         });
     });
 
+
 require __DIR__ . '/auth.php';
