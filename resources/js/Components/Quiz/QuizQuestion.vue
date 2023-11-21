@@ -61,9 +61,9 @@ watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
                        :question-finished="questionFinished"/>
         </Transition>
 
-        <p class="text-2xl font-bold my-1">{{ question?.text ?? "Le quiz va bientôt commencer !" }}</p>
+        <p class="text-2xl font-bold my-1" >{{ question?.text ?? "Le quiz va bientôt commencer !" }}</p>
         <div v-if="questionFinished">Question terminée !</div>
-        <div v-if="question" class="text-xl sm:hidden">Question {{ question.order }}</div>
+        <div v-if="question" class="text-xl" :class="[overlay ? 'hidden' : '']">Question {{ question.order }}</div>
         <ul class="grid grid-cols-2 place-items-stretch gap-2">
             <li v-for="answer in question?.answers"
             class="flex flex-1 w-full justify-center items-center"

@@ -24,18 +24,23 @@ const questionFinished = computed(() => {
 </script>
 
 <template>
-    <!--TODO remove background -->
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div class="min-h-screen flex justify-center items-end">
+<!--        <div>-->
+<!--            <div>Debug fullscreen : </div>-->
+<!--            <pre>user : {{user}}</pre>-->
+<!--            <pre>quiz : {{quiz}}</pre>-->
+<!--            <pre>question : {{question}}</pre>-->
+<!--            <pre>guess : {{guess}}</pre>-->
+<!--        </div>-->
         <DefaultTwitchExtension/>
         <QuizComponent
+            v-if="quiz"
             v-bind="{quiz,question,guess, questionFinished}"
             :overlay="true"
         />
+
     </div>
-    <!--    <pre>user : {{user}}</pre>-->
-    <!--    <pre>quiz : {{quiz}}</pre>-->
-    <!--    <pre>question : {{question}}</pre>-->
-    <!--    <pre>guess : {{guess}}</pre>-->
+
 </template>
 
 <style scoped>
