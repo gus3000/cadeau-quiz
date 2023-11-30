@@ -26,6 +26,12 @@ Route::prefix('debug')
                 abort(403);
             return phpinfo();
         });
+
+        Route::get('/webgl', function () {
+            if (App::isProduction())
+                abort(403);
+            return Inertia::render('WebGL');
+        });
     });
 
 
@@ -48,7 +54,7 @@ Route::get('/', function () {
 
     $question?->makeHiddenIf(!$question->closed, 'correct_answer');
 
-    if($question->finished)
+    if ($question->finished)
         $question->load('answers.guesses');
 
     $guess = $question?->guessFromUser($user);

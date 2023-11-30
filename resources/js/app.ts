@@ -8,6 +8,7 @@ import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist/vue.m';
 import 'flowbite';
 
 import type {DefineComponent} from "vue";
+import {TroisJSVuePlugin} from "troisjs";
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'CadeauQuiz';
 
@@ -17,6 +18,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(TroisJSVuePlugin)
             .use(ZiggyVue, Ziggy)
             .mount(el);
     },
