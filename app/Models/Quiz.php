@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $closed
  * @property \App\Models\Question|null $current_question
  * @property-read bool $is_open
+ * @property-read array $stats
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Question> $questions
  * @property-read int|null $questions_count
  * @property-read \App\Models\User|null $user
@@ -155,5 +156,47 @@ class Quiz extends Model
             return null;
         return
             $this->questions->whereNotNull('opened_at')->last();
+    }
+
+    public function getStatsAttribute(): array
+    {
+        $playerStats = [];
+        foreach($this->questions as $question) {
+            if(is_null($question->opened_at))
+                continue;
+            $questionStats = $question->stats;
+            foreach($questionStats as $name => $stat) {
+                if(!key_exists($name, $playerStats)) {
+                    $playerStats[$name] = [
+                        'name' => $name,
+                        'score' => 0,
+                        'goodAnswers' => 0,
+                    ];
+                }
+
+                $playerStats[$name]['score'] += $stat['score'];
+                if($stat['correct'])
+                    $playerStats[$name]['goodAnswers']++;
+            }
+        }
+
+
+        usort($playerStats, fn($a,$b) => $b['score'] <=> $a['score']);
+
+        return [
+            'players' => $playerStats,
+//            'players' => [
+//                [
+//                    'name' => 'castless',
+//                    'score' => 1324,
+//                    'goodAnswers' => 2,
+//                ],
+//                [
+//                    'name' => 'jeanmichel',
+//                    'score' => 81234,
+//                    'goodAnswers' => 17,
+//                ]
+//            ]
+        ];
     }
 }

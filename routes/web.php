@@ -48,15 +48,21 @@ Route::get('/', function () {
 
     $question?->makeHiddenIf(!$question->closed, 'correct_answer');
 
+    if($question->finished)
+        $question->load('answers.guesses');
+
     $guess = $question?->guessFromUser($user);
 
     $guess?->load('answer.question');
+
+    $stats = $quiz->stats;
 
     return Inertia::render('Quiz', [
         'quiz' => $quiz,
         'question' => $question,
         'guess' => $guess,
         'admin' => $user->is_admin,
+        'stats' => $stats,
     ]);
 })
     ->name('home');

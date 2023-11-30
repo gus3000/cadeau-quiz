@@ -7,12 +7,14 @@ import QuizComponent from "@/Components/Quiz/QuizComponent.vue";
 import {TQuiz} from "@/Model/TQuiz";
 import type {TQuestion} from "@/Model/TQuestion";
 import {TGuess} from "@/Model/TGuess";
+import {TStats} from "@/Model/TStats";
 
 const props = defineProps({
     user: Object as PropType<User>,
     quiz: Object as PropType<TQuiz>,
     question: Object as PropType<TQuestion>,
     guess: Object as PropType<TGuess>,
+    stats: Object as PropType<TStats>,
 });
 
 const questionFinished = computed(() => {
@@ -35,7 +37,7 @@ const questionFinished = computed(() => {
         <DefaultTwitchExtension/>
         <QuizComponent
             v-if="quiz"
-            v-bind="{quiz,question,guess, questionFinished}"
+            v-bind="{quiz,question,guess,stats,questionFinished}"
             :overlay="true"
         />
 

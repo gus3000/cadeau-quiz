@@ -1,4 +1,5 @@
 import type {TQuestion} from "@/Model/TQuestion";
+import {TGuess} from "@/Model/TGuess";
 
 export interface TAnswer {
     id: int,
@@ -7,4 +8,5 @@ export interface TAnswer {
     text: string,
     correct: ?boolean,
     question: TQuestion,
+    guesses: TGuess[],
 }

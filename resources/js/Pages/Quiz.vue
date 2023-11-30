@@ -10,11 +10,13 @@ import {TGuess} from "@/Model/TGuess";
 import IconButton from "@/Components/Button/IconButton.vue";
 import {CloseCircleIcon} from "flowbite-vue-icons";
 import QuizComponent from "@/Components/Quiz/QuizComponent.vue";
+import {TStats} from "@/Model/TStats";
 
 const props = defineProps({
     quiz: Object as PropType<TQuiz>,
     question: Object as PropType<TQuestion>,
     guess: Object as PropType<TGuess>,
+    stats: Object as PropType<TStats>,
     admin: Boolean,
 });
 
@@ -49,10 +51,7 @@ setQuestionEndTimer();
     <Head title="Quiz"/>
     <AuthenticatedLayout>
         <QuizComponent
-            :quiz="quiz"
-            :question="question"
-            :guess="guess"
-            :question-finished="questionFinished"
+            v-bind="{quiz,question,guess,stats,questionFinished}"
             />
         <QuizAdminPanel
             v-if="!quiz?.finished && admin"

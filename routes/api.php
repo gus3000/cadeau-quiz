@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\ShowStats;
 use App\Http\Controllers\Api\QuestionApiController;
 use App\Http\Controllers\Api\QuizApiController;
 use App\Http\Controllers\Api\TwitchApiController;
@@ -34,6 +35,10 @@ Route::prefix('quiz')->group(function () {
         return $quiz->questions;
     });
 
+    Route::get('/{quiz}/stats', function (Quiz $quiz) {
+        return $quiz->stats;
+    });
+
     Route::middleware(['web', 'auth:sanctum', 'quiz_owner'])->group(function () {
 
         Route::post('/{quiz}/lock', [QuizApiController::class, 'lock'])->name("api.quizzes.lock");
@@ -51,6 +56,10 @@ Route::prefix('quiz')->group(function () {
 
             Route::post('/next-question', function () {
                 Quiz::currentlyOpen()->nextQuestion();
+            });
+
+            Route::post('/show-stats', function () {
+                ShowStats::dispatch();
             });
         });
     });

@@ -17,10 +17,12 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+//        $nickname = fake()->firstName() . fake()->numberBetween(0,9999);
+        $nickname = fake()->userName;
         return [
-            'name' => fake()->name(),
+            'name' => $nickname,
             'twitch_id' => fake()->unique()->numberBetween(-1000000, -1),
-            'twitch_avatar' => fake()->imageUrl(),
+            'twitch_avatar' => fake()->imageUrl(randomize: false, word: $nickname),
             'remember_token' => Str::random(10),
 
         ];

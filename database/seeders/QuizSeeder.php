@@ -6,6 +6,7 @@ use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\User;
+use DateInterval;
 use Illuminate\Database\Seeder;
 
 class QuizSeeder extends Seeder
@@ -19,7 +20,7 @@ class QuizSeeder extends Seeder
         $quizzes[] = Quiz::factory()->create([
             'name' => 'Ennemis de JV',
             'created_by' => $adminUser->id,
-            'opened_at' => new \DateTime('yesterday'),
+            'opened_at' => (new \DateTime())->sub(DateInterval::createFromDateString("1 day")),
             'locked' => true,
             'finished' => true,
             'closed' => true,
@@ -54,8 +55,12 @@ class QuizSeeder extends Seeder
         $csv = array_map("str_getcsv", file("database/data/questions/$name.csv", FILE_SKIP_EMPTY_LINES));
         $keys = array_shift($csv);
 
+        $questionTime = $quiz->opened_at;
+        $questionInterval = DateInterval::createFromDateString("2 minutes");
         foreach ($csv as $index => $row) {
+            $questionTime = $questionTime ? date_add($questionTime, $questionInterval) : null;
             $questionData = array_combine($keys, $row);
+            $questionData['opened_at'] = $questionTime;
             $questionData['quiz_id'] = $quiz->id;
             $questionData['closed'] = $quiz->finished;
             $questionData['order'] = $index + 1;

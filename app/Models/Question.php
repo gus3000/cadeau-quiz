@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -26,11 +27,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $order
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Answer> $answers
  * @property-read int|null $answers_count
+ * @property-read \Carbon\Carbon|null $closed_at
  * @property-read \App\Models\Answer|null $correct_answer
  * @property-read bool $finished
  * @property-read bool $is_open
+ * @property-read array $stats
  * @property-read float|null $time_remaining
  * @property-read float|null $time_remaining_with_grace_period
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Guess> $guesses
+ * @property-read int|null $guesses_count
  * @property-read \App\Models\Media|null $media
  * @property-read \App\Models\Quiz $quiz
  * @method static \Database\Factories\QuestionFactory factory($count = null, $state = [])
@@ -86,6 +91,16 @@ class Question extends Model
         $now = time();
 
         return ($now - $openedAt) > $this->duration;
+    }
+
+    public function getClosedAtAttribute(): ?Carbon
+    {
+        if (!$this->closed)
+            return null;
+
+        $openedTime = $this->opened_at;
+        $openedTime->addSeconds($this->duration);
+        return $openedTime;
     }
 
     public function quiz(): BelongsTo
@@ -150,6 +165,11 @@ class Question extends Model
             ->first();
     }
 
+    public function guesses(): HasManyThrough
+    {
+        return $this->hasManyThrough(Guess::class, Answer::class);
+    }
+
     public function answers(): HasMany
     {
         return $this->hasMany(Answer::class)->orderBy('order');
@@ -158,6 +178,23 @@ class Question extends Model
     public function media(): HasOne
     {
         return $this->hasOne(Media::class);
+    }
+
+    public function getStatsAttribute(): array
+    {
+        $stats = [];
+        foreach ($this->guesses as $guess) {
+            $name = User::find($guess->user_id)->name;
+            $correct = $guess->answer_id === $this->correct_answer->id;
+            $stats[$name] = [
+                'name' => $name,
+                'score' => abs($guess->score) * ($correct ? 1 : -1),
+                'correct' => $correct,
+            ];
+        }
+
+//        usort($stats, fn($a,$b) => $b['score'] <=> $a['score']);
+        return $stats;
     }
 
 //    public function createdBy(): BelongsTo

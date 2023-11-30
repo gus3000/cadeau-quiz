@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $answer_id
  * @property int $user_id
+ * @property int $score
  * @property-read \App\Models\Answer $answer
  * @property-read \App\Models\Question|null $question
  * @method static \Database\Factories\GuessFactory factory($count = null, $state = [])
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
  * @method static \Illuminate\Database\Eloquent\Builder|Guess whereAnswerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Guess whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Guess whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Guess whereScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Guess whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Guess whereUserId($value)
  * @mixin \Eloquent

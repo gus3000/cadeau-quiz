@@ -8,6 +8,7 @@
     }
 
     .btn-neutral {
+        @apply btn;
         @apply bg-gray-500 text-white disabled:opacity-25;
     }
 
@@ -23,6 +24,7 @@
 
     .radio-label-good {
         @apply bg-green-500 text-white font-bold;
+        @apply hover:bg-green-400;
     }
 
     .radio-label-bad {

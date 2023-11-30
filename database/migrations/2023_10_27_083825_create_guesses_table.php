@@ -20,6 +20,7 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignIdFor(Answer::class)->constrained();
             $table->foreignIdFor(User::class)->constrained();
+            $table->integer('score');
 
             $table->unique(['user_id', 'answer_id']);
         });

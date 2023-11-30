@@ -64,7 +64,10 @@ class QuestionApiController extends Controller
      */
     public function show(Question $question)
     {
-        //
+        if($question->finished)
+            $question->load('answers.guesses');
+
+        return $question;
     }
 
     /**

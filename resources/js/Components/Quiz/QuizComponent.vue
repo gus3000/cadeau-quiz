@@ -1,16 +1,19 @@
 <script setup lang="ts">
 
-import {onMounted, PropType} from "vue";
+import {onMounted, PropType, ref} from "vue";
 import type {TQuiz} from "@/Model/TQuiz";
 import type {TQuestion} from "@/Model/TQuestion";
 import {TGuess} from "@/Model/TGuess";
 import QuizQuestion from "@/Components/Quiz/QuizQuestion.vue";
 import {router} from "@inertiajs/vue3";
+import {TStats} from "@/Model/TStats";
+import QuizStats from "@/Components/Quiz/QuizStats.vue";
 
 const props = defineProps({
     quiz: Object as PropType<TQuiz>,
     question: Object as PropType<TQuestion>,
     guess: Object as PropType<TGuess>,
+    stats: Object as PropType<TStats>,
     overlay: {
         type: Boolean,
         default: false,
@@ -18,10 +21,23 @@ const props = defineProps({
     questionFinished: Boolean,
 });
 
+const showStats = ref(false);
+
 onMounted(() => {
     Echo.private('quiz.flow')
+        .listen('ShowStats', (e:any) => {
+          console.log("SHOW STATS", e);
+          router.reload({
+            only: ['stats'],
+            onFinish: () => {
+              showStats.value = true;
+            }
+          });
+
+        })
         .listen('NextQuestion', (e: any) => {
             console.log("NEXT QUESTION", e);
+            showStats.value = false;
             // console.log("question id before :", props.question?.id);
             router.reload({
                 only: ['quiz', 'question'], onFinish: () => {
@@ -47,12 +63,15 @@ onMounted(() => {
                 </div>
                 <div class="bg-white px-12 lg:py-12 sm:py-2 rounded-lg shadow-lg w-full">
                     <QuizQuestion
-                        v-if="question"
+                        v-if="question && !showStats"
                         v-bind="{question, guess, questionFinished, overlay}"
                     />
-                    <div v-else-if="quiz?.finished">
+                  <QuizStats
+                      v-else-if="showStats"
+                      :stats="stats"
+                  />
+                   <div v-else-if="quiz?.finished">
                         Quiz terminé !
-                        Prochainement, des stats !
                     </div>
                     <div v-else-if="quiz">
                         Le quiz va bientôt démarrer...

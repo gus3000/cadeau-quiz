@@ -62,7 +62,7 @@ watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
         </Transition>
 
         <p class="text-2xl font-bold my-1" >{{ question?.text ?? "Le quiz va bientôt commencer !" }}</p>
-        <div v-if="questionFinished">Question terminée !</div>
+<!--        <div v-if="questionFinished">Question terminée !</div>-->
         <div v-if="question" class="text-xl" :class="[overlay ? 'hidden' : '']">Question {{ question.order }}</div>
         <ul class="grid grid-cols-2 place-items-stretch gap-2">
             <li v-for="answer in question?.answers"
@@ -78,10 +78,11 @@ watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
                 />
                 <label
                     :for="`answer-${answer.id}`"
-                    class="grow block border border-gray-300 grounded-lg py-2 px-6 text-lg rounded-lg cursor-pointer text-center"
+                    class="grow border border-gray-300 grounded-lg py-2 px-6 text-lg rounded-lg cursor-pointer text-center flex justify-between"
                     :class="answerClass(answer)"
                 >
-                    {{ answer.text }}
+                    <div>{{ answer.text }}</div>
+                    <div v-if="answer.guesses">{{answer.guesses.length}}</div>
                 </label>
             </li>
         </ul>

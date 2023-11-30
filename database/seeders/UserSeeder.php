@@ -23,5 +23,7 @@ class UserSeeder extends Seeder
             'name' => 'cadeauJeff',
             'admin' => false,
         ]);
+
+        User::factory(10)->create();
     }
 }
