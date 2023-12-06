@@ -30,7 +30,11 @@
     .radio-label-bad {
         @apply bg-red-500 text-white font-bold;
         @apply hover:bg-red-400;
+    }
 
+    .radio-label-selected {
+        @apply bg-blue-500 text-white font-bold;
+        @apply hover:bg-blue-400;
     }
 
     .themed-icon {
@@ -44,5 +48,4 @@
     .cadeau-tooltip {
         @apply absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700;
     }
-
 }

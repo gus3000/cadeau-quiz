@@ -54,7 +54,7 @@ Route::get('/', function () {
 
     $question?->makeHiddenIf(!$question->closed, 'correct_answer');
 
-    if ($question->finished)
+    if ($question?->finished)
         $question->load('answers.guesses');
 
     $guess = $question?->guessFromUser($user);
