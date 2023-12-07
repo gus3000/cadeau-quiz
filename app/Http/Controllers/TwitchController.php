@@ -51,13 +51,13 @@ class TwitchController extends Controller
         ]);
     }
 
-    public function landing(Request $request, string $route): \Inertia\Response
-    {
-
-        return Inertia::render('TwitchExtension/Landing', [
-            'user' => Auth::user(),
-            'windowType' => $route,
-//            'headerToken' => $this->jwtAuth->getJwtToken($request)
-        ]);
-    }
+//    public function landing(Request $request, string $route): \Inertia\Response
+//    {
+//
+//        return Inertia::render('TwitchExtension/Landing', [
+//            'user' => Auth::user(),
+//            'windowType' => $route,
+////            'headerToken' => $this->jwtAuth->getJwtToken($request)
+//        ]);
+//    }
 }

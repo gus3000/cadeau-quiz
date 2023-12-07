@@ -41,13 +41,13 @@
 <!--})-->
 <!--</script>-->
 
-<!--<template>-->
+<template>
 <!--    <IconButton :icon-name="ArrowRightFromBracketIcon" text="test" @click="tryHome"/>-->
 <!--    <pre id="debug"></pre>-->
 <!--&lt;!&ndash;    <pre id="debugUser">user : {{ user ?? 'nope' }}</pre>&ndash;&gt;-->
 <!--    <pre id="debugWindow">{{ windowType }}</pre>-->
 <!--    <Component :is="Fullscreen" />-->
-<!--</template>-->
+</template>
 
 <!--<style scoped>-->
 <!--pre {-->

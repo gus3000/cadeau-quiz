@@ -15,6 +15,6 @@ class QuestionTest extends TestCase
         $this->seed(UserSeeder::class);
         $this->seed(QuizSeeder::class);
 
-        $this->assertDatabaseCount('questions', 40);
+        $this->assertDatabaseCount('questions', 20+20+2);
     }
 }
