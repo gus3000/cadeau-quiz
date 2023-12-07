@@ -9,6 +9,8 @@ export interface TQuestion {
     quiz: TQuiz,
     text: string,
     duration: float,
+    closed: boolean,
+    finished: boolean,
     order: int,
     /** ⚠ UTC */
     opened_at: Date,

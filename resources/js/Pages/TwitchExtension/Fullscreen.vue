@@ -20,7 +20,7 @@ const props = defineProps({
 const questionFinished = computed(() => {
     if (props.question === null || props.question === undefined)
         return false;
-    console.log('question :', props.question);
+    // console.log('question :', props.question);
     return props.question?.time_remaining_with_grace_period <= 0;
 });
 </script>

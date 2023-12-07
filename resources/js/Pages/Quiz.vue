@@ -20,11 +20,11 @@ const props = defineProps({
     admin: Boolean,
 });
 
-function setQuestionEndTimer() {
+// function setQuestionEndTimer() {
     // const rem = remainingSeconds.value
-    const rem = props.question?.time_remaining_with_grace_period;
-    console.log("remaining :", rem);
-    if (rem && rem > 0) {
+    // const rem = props.question?.time_remaining_with_grace_period;
+    // console.log("remaining :", rem);
+    // if (rem && rem > 0) {
         // console.log("setting timer to", rem)
         // const showStatsTimeout = setTimeout(function () {
         //     // router.reload({only: ['question']});
@@ -32,17 +32,17 @@ function setQuestionEndTimer() {
         // const hideClockTimeout = setTimeout(() => {
         //     console.log("question finished !");
         // }, rem * 1000)
-    }
-}
+    // }
+// }
 
 const questionFinished = computed(() => {
     if (props.question === null || props.question === undefined)
         return false;
-    console.log('question :', props.question);
+    // console.log('question :', props.question);
     return props.question?.time_remaining_with_grace_period <= 0;
 });
 
-setQuestionEndTimer();
+// setQuestionEndTimer();
 
 
 </script>

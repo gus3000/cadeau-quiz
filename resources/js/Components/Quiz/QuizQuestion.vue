@@ -8,8 +8,6 @@ import type {TGuess} from "@/Model/TGuess";
 
 const selectedAnswer = ref<TAnswer | null>(null);
 const score = ref<number>(0);
-let scoreTickInterval: number;
-const SCORE_UPDATE_INTERVAL = 50;
 
 function selectAnswer(answer: TAnswer) {
     const url = `/api/user/guess/${props.question?.id}/${answer.id}`;
@@ -40,13 +38,8 @@ function answerClass(answer: TAnswer) {
 
 }
 
-function tickScore() {
-    score.value -= SCORE_UPDATE_INTERVAL;
-    if (score.value <= 0) {
-        score.value = 0;
-        clearInterval(scoreTickInterval);
-        scoreTickInterval = -1;
-    }
+function updateScore(s: number) {
+    score.value = s;
 }
 
 const props = defineProps({
@@ -65,18 +58,13 @@ watch(() => props.question?.id, (newId, oldId) => {
     document.getElementsByName(`question-answer-${oldId}`).forEach((input: HTMLElement) => {
         (input as HTMLInputElement).checked = false;
     });
-    score.value = props.question?.time_remaining_with_grace_period * 1000;
-    if (scoreTickInterval) {
-        clearInterval(scoreTickInterval);
-    }
-    scoreTickInterval = setInterval(tickScore, SCORE_UPDATE_INTERVAL);
 });
 
 watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
     if (newCorrect === undefined) {
         // console.log("pas de triche !")
     } else {
-        console.log("new correct answer :", newCorrect)
+        // console.log("new correct answer :", newCorrect)
 
     }
 })
@@ -84,19 +72,9 @@ watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
 
 <template>
     <div>
-        <Transition name="bounce">
-            <Countdown v-show="!questionFinished"
-                       :total="question?.duration"
-                       :remaining="question?.time_remaining_with_grace_period"
-                       :question-finished="questionFinished"/>
-        </Transition>
-
         <p class="text-2xl font-bold my-1">{{ question?.text ?? "Le quiz va bientôt commencer !" }}</p>
         <!--        <div v-if="questionFinished">Question terminée !</div>-->
         <div v-if="question" class="text-xl" :class="[overlay ? 'hidden' : '']">Question {{ question.order }}</div>
-        <div class="cadeau-timer-container">
-            <div class="cadeau-timer">{{ score }}</div>
-        </div>
         <ul class="grid grid-cols-2 place-items-stretch gap-2">
             <li v-for="answer in question?.answers"
                 class="flex flex-1 w-full justify-center items-center"
@@ -119,6 +97,13 @@ watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
                 </label>
             </li>
         </ul>
+        <Transition name="bounce">
+            <Countdown
+                v-if="!questionFinished"
+                :question="question"
+                @update-score="updateScore"
+            />
+        </Transition>
     </div>
 </template>
 

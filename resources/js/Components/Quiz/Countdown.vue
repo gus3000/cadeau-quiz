@@ -1,56 +1,115 @@
 <script setup lang="ts">
 
-import {computed, onBeforeUnmount, type PropType, watch} from "vue";
+import {computed, onBeforeUnmount, onMounted, type PropType, ref, watch} from "vue";
 import {DateTime} from "luxon";
+import $ from "jquery";
 
 import type {TQuestion} from "@/Model/TQuestion";
 import {restartAnimation} from "@/Services/Animation";
 
+
+const SCORE_UPDATE_INTERVAL = 50;
+
+const emit = defineEmits(['updateScore']);
+
 const props = defineProps<{
-    total: number,
-    remaining: number,
-    questionFinished: boolean,
+    question: TQuestion,
 }>();
 
-let dynamicRemaining = props.remaining ?? 0;
+const score = ref<number>(props.question.time_remaining_with_grace_period * 1000);
+const dynamicRemaining = ref<number>(props.question.time_remaining_with_grace_period);
+
+let scoreTickInterval: number;
+let lastTextRefresh = DateTime.now();
+
+function tickScore() {
+    let now = DateTime.now();
+    let diff = now.diff(lastTextRefresh).as('seconds');
+    lastTextRefresh = now;
+
+
+    setScore(score.value - diff * 1000);
+    // score.value -= diff * 1000;
+    // score.value = Math.max(score.value, 0);
+
+    dynamicRemaining.value -= diff;
+    dynamicRemaining.value = Math.max(dynamicRemaining.value, 0);
+
+    emit('updateScore', score.value);
+    if (score.value <= 0) {
+        score.value = 0;
+        clearInterval(scoreTickInterval);
+        scoreTickInterval = -1;
+    }
+}
+
+function setScore(s:number) {
+    if(s < 0)
+        s = 0;
+    s = Math.round(s);
+    score.value = s;
+}
+
+function initIntervals() {
+    console.log("countdown restart !");
+    let clockHand = document.getElementById('clock-hand');
+    if (clockHand === null)
+        return;
+    restartAnimation(clockHand, 'rotating');
+
+    dynamicRemaining.value = props.question.time_remaining_with_grace_period;
+    score.value = props.question?.time_remaining_with_grace_period * 1000;
+    if (scoreTickInterval) {
+        clearInterval(scoreTickInterval);
+    }
+    lastTextRefresh = DateTime.now();
+    scoreTickInterval = setInterval(tickScore, SCORE_UPDATE_INTERVAL);
+}
+
 
 const clockDurationSeconds = computed(() => {
-    return `${props.total}s`;
+    return `${props.question.duration}s`;
 });
 
 const clockDelay = computed(() => {
-    return `-${props.total - props.remaining}s`;
+    return `-${props.question.duration - props.question.time_remaining_with_grace_period}s`;
 });
 
-let lastTextRefresh = DateTime.now();
-const textRefresh = setInterval(() => {
-    let now = DateTime.now();
-    let diff = now.diff(lastTextRefresh).as('seconds');
+// let lastTextRefresh = DateTime.now();
+// const textRefresh = setInterval(() => {
+//     let now = DateTime.now();
+//     let diff = now.diff(lastTextRefresh).as('seconds');
+//
+//     dynamicRemaining.value -= diff;
+//     dynamicRemaining.value = Math.max(dynamicRemaining.value, 0);
+//
+//     $("#label-remaining-time").text(dynamicRemaining.value.toFixed(2));
+//     $("#countdown-score").text(score.value);
+//     lastTextRefresh = now;
+// }, SCORE_UPDATE_INTERVAL);
 
-    dynamicRemaining -= diff;
-    dynamicRemaining = Math.max(dynamicRemaining, 0);
-
-
-    let el = document.getElementById('label-remaining-time');
-    if (el)
-        el.innerText = dynamicRemaining.toFixed(2);
-    lastTextRefresh = now;
-}, 50);
+onMounted(() => {
+    initIntervals();
+})
 
 onBeforeUnmount(() => {
-    clearInterval(textRefresh);
+    clearInterval(scoreTickInterval);
 });
-watch(() => props.questionFinished, async (finished, oldFinished) => {
-    if (!finished) {
-        let clockHand = document.getElementById('clock-hand');
-        if(clockHand === null)
-            return;
-        restartAnimation(clockHand, 'rotating');
-    }
-});
+// watch(() => props.question.finished, async (finished, oldFinished) => {
+//     console.log("countdown restart ? ", !finished);
+//     if (!finished) {
+//         let clockHand = document.getElementById('clock-hand');
+//         if(clockHand === null)
+//             return;
+//         restartAnimation(clockHand, 'rotating');
+//     }
+// });
 
-watch(() => props.remaining, async (remaining: number) => {
-    dynamicRemaining = remaining;
+watch(() => props.question.id, (newId, oldId) => {
+    if (newId === oldId)
+        return;
+
+    initIntervals();
 });
 </script>
 
@@ -59,7 +118,7 @@ watch(() => props.remaining, async (remaining: number) => {
         <div class="flex flex-col align-center items-center">
             <div class="relative flex items-center justify-end w-20 h-20 overflow-hidden rounded-full"
                  :class="[
-            questionFinished
+            question.finished
             ? 'bg-red-500'
             : 'bg-gray-900'
         ]"
@@ -73,15 +132,16 @@ watch(() => props.remaining, async (remaining: number) => {
                 </div>
 
             </div>
-            <div id="label-remaining-time">0</div>
+            <div>{{ score }}</div>
+<!--            <div id="label-remaining-time">{{ dynamicRemaining.toFixed(2) }}</div>-->
         </div>
 
 
     </div>
-    <!--    <pre>total : {{ props.total }}</pre>-->
-    <!--    <pre>remaining : {{ props.remaining }}</pre>-->
-    <!--    <pre>clock duration : {{ clockDurationSeconds }}</pre>-->
-    <!--    <pre>clock delay : {{ clockDelay }}</pre>-->
+    <!--        <pre>total : {{ props.total }}</pre>-->
+<!--    <pre>base remaining : {{ question.time_remaining_with_grace_period.toFixed(2) }}</pre>-->
+<!--    <pre>clock duration : {{ clockDurationSeconds }}</pre>-->
+<!--    <pre>clock delay : {{ clockDelay }}</pre>-->
 </template>
 
 <style scoped>
