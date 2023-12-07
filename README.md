@@ -3,10 +3,8 @@ Un moteur de quiz, fait pour le streameur [cadeauAnthony](https://www.twitch.tv/
 Lui dites pas, c'est une surprise !
 
 # A faire
-- affichage des scores de la question quand la question est finie (https://flowbite.com/docs/plugins/charts/)
-- interface admin
-- écran d'affichage des scores globaux avec classement
-
+    - Ecran pour le gagnant (genre "bravo vous gagnez cette image de PS5")
+    - Permettre d'invalider la question
 # Lancer le projet en local
 
 pré-requis : avoir Docker installé et configuré pour l'utilisateur courant.
