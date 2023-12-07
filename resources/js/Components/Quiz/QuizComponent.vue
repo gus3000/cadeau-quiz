@@ -25,14 +25,14 @@ const showStats = ref(false);
 
 onMounted(() => {
     Echo.private('quiz.flow')
-        .listen('ShowStats', (e:any) => {
-          console.log("SHOW STATS", e);
-          router.reload({
-            only: ['stats'],
-            onFinish: () => {
-              showStats.value = true;
-            }
-          });
+        .listen('ShowStats', (e: any) => {
+            console.log("SHOW STATS", e);
+            router.reload({
+                only: ['stats'],
+                onFinish: () => {
+                    showStats.value = true;
+                }
+            });
 
         })
         .listen('NextQuestion', (e: any) => {
@@ -62,23 +62,26 @@ onMounted(() => {
                     class="px-6 py-6 text-gray-900 dark:text-gray-100">{{ quiz?.name }}
                 </div>
                 <div class="bg-white px-12 lg:py-12 sm:py-2 rounded-lg shadow-lg w-full">
-                    <QuizQuestion
-                        v-if="question && !showStats"
-                        v-bind="{question, guess, questionFinished, overlay}"
-                    />
-                  <QuizStats
-                      v-else-if="showStats"
-                      :stats="stats"
-                  />
-                   <div v-else-if="quiz?.finished">
-                        Quiz terminé !
-                    </div>
-                    <div v-else-if="quiz">
-                        Le quiz va bientôt démarrer...
-                    </div>
-                    <div v-else>
-                        Pas de quiz en cours, mais du coup vous ne devriez pas voir ceci.
-                    </div>
+                    <Transition name="slide" mode="out-in">
+                        <QuizQuestion
+                            v-if="question && !showStats"
+                            v-bind="{question, guess, questionFinished, overlay}"
+                        />
+                        <QuizStats
+                            v-else-if="showStats"
+                            :stats="stats"
+                        />
+                        <div v-else-if="quiz?.finished">
+                            Quiz terminé !
+                        </div>
+                        <div v-else-if="quiz">
+                            Le quiz va bientôt démarrer...
+                        </div>
+                        <div v-else>
+                            Pas de quiz en cours, mais du coup vous ne devriez pas voir ceci.
+                        </div>
+                    </Transition>
+
                 </div>
             </div>
         </div>
@@ -86,5 +89,16 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.slide-enter-active {
+    transition: all 0.3s ease-out;
+}
 
+.slide-leave-active {
+    transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-enter-from, .slide-leave-to {
+    transform: translateY(50px);
+    opacity: 0;
+}
 </style>

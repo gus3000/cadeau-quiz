@@ -9,12 +9,19 @@ import {restartAnimation} from "@/Services/Animation";
 
 
 const SCORE_UPDATE_INTERVAL = 50;
+const CLOCK_START_DELAY = 1000;
 
 const emit = defineEmits(['updateScore']);
 
 const props = defineProps<{
     question: TQuestion,
 }>();
+
+const maxScore = computed(() => props.question.time_remaining_with_grace_period * 1000);
+const questionAlreadyStarted = computed(() => {
+    return props.question.time_remaining_with_grace_period < props.question.duration
+});
+const clockStartDelay = computed(() => questionAlreadyStarted.value ? 0 : CLOCK_START_DELAY);
 
 const score = ref<number>(props.question.time_remaining_with_grace_period * 1000);
 const dynamicRemaining = ref<number>(props.question.time_remaining_with_grace_period);
@@ -46,6 +53,8 @@ function tickScore() {
 function setScore(s:number) {
     if(s < 0)
         s = 0;
+    else if(s > maxScore.value)
+        s = maxScore.value;
     s = Math.round(s);
     score.value = s;
 }
@@ -55,15 +64,18 @@ function initIntervals() {
     let clockHand = document.getElementById('clock-hand');
     if (clockHand === null)
         return;
-    restartAnimation(clockHand, 'rotating');
+
+    restartAnimation(clockHand, 'rotating', clockStartDelay.value);
 
     dynamicRemaining.value = props.question.time_remaining_with_grace_period;
     score.value = props.question?.time_remaining_with_grace_period * 1000;
     if (scoreTickInterval) {
         clearInterval(scoreTickInterval);
     }
-    lastTextRefresh = DateTime.now();
-    scoreTickInterval = setInterval(tickScore, SCORE_UPDATE_INTERVAL);
+    setTimeout(() => {
+        lastTextRefresh = DateTime.now();
+        scoreTickInterval = setInterval(tickScore, SCORE_UPDATE_INTERVAL);
+    }, clockStartDelay.value);
 }
 
 
@@ -145,7 +157,9 @@ watch(() => props.question.id, (newId, oldId) => {
 </template>
 
 <style scoped>
-
+#clock-hand {
+    transform: rotate(-90deg);
+}
 
 @keyframes rotating {
     from {
