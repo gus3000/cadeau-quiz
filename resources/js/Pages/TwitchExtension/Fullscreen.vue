@@ -14,7 +14,8 @@ const props = defineProps({
     quiz: Object as PropType<TQuiz>,
     question: Object as PropType<TQuestion>,
     guess: Object as PropType<TGuess>,
-    stats: Object as PropType<TStats>,
+    questionStats: Object as PropType<TStats>,
+    quizStats: Object as PropType<TStats>,
 });
 
 const questionFinished = computed(() => {
@@ -27,17 +28,17 @@ const questionFinished = computed(() => {
 
 <template>
     <div class="min-h-screen flex justify-center items-end">
-<!--        <div>-->
-<!--            <div>Debug fullscreen : </div>-->
-<!--            <pre>user : {{user}}</pre>-->
-<!--            <pre>quiz : {{quiz}}</pre>-->
-<!--            <pre>question : {{question}}</pre>-->
-<!--            <pre>guess : {{guess}}</pre>-->
-<!--        </div>-->
+        <!--        <div>-->
+        <!--            <div>Debug fullscreen : </div>-->
+        <!--            <pre>user : {{user}}</pre>-->
+        <!--            <pre>quiz : {{quiz}}</pre>-->
+        <!--            <pre>question : {{question}}</pre>-->
+        <!--            <pre>guess : {{guess}}</pre>-->
+        <!--        </div>-->
         <DefaultTwitchExtension/>
         <QuizComponent
             v-if="quiz"
-            v-bind="{quiz,question,guess,stats,questionFinished}"
+            v-bind="{quiz,question,guess,questionStats,quizStats,questionFinished}"
             :overlay="true"
         />
 

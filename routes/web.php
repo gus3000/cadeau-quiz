@@ -61,14 +61,16 @@ Route::get('/', function () {
 
     $guess?->load('answer.question');
 
-    $stats = $quiz->stats;
+    $quizStats = $quiz->stats;
+    $questionStats = $question->stats;
 
     return Inertia::render('Quiz', [
         'quiz' => $quiz,
         'question' => $question,
         'guess' => $guess,
         'admin' => $user->is_admin,
-        'stats' => $stats,
+        'quizStats' => $quizStats,
+        'questionStats' => $questionStats,
     ]);
 })
     ->name('home');

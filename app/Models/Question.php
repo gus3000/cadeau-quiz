@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\QuestionClosed;
+use App\Models\Enum\PlayerStatsType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -193,8 +194,12 @@ class Question extends Model
             ];
         }
 
-//        usort($stats, fn($a,$b) => $b['score'] <=> $a['score']);
-        return $stats;
+        usort($stats, fn($a, $b) => $b['score'] <=> $a['score']);
+        return
+            [
+                'players' => $stats,
+                'statsType' => PlayerStatsType::Question,
+            ];
     }
 
 //    public function createdBy(): BelongsTo

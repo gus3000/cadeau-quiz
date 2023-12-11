@@ -13,7 +13,8 @@ const props = defineProps({
     quiz: Object as PropType<TQuiz>,
     question: Object as PropType<TQuestion>,
     guess: Object as PropType<TGuess>,
-    stats: Object as PropType<TStats>,
+    questionStats: Object as PropType<TStats>,
+    quizStats: Object as PropType<TStats>,
     overlay: {
         type: Boolean,
         default: false,
@@ -67,10 +68,17 @@ onMounted(() => {
                             v-if="question && !showStats"
                             v-bind="{question, guess, questionFinished, overlay}"
                         />
-                        <QuizStats
+                        <div
                             v-else-if="showStats"
-                            :stats="stats"
-                        />
+                            class="flex flex-row justify-center gap-40"
+                        >
+                            <QuizStats
+                                :stats="questionStats"
+                            />
+                            <QuizStats
+                                :stats="quizStats"
+                            />
+                        </div>
                         <div v-else-if="quiz?.finished">
                             Quiz terminé !
                         </div>

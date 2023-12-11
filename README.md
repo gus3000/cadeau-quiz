@@ -2,9 +2,8 @@ Un moteur de quiz, fait pour le streameur [cadeauAnthony](https://www.twitch.tv/
 
 Lui dites pas, c'est une surprise !
 
-# A faire
-    - Ecran pour le gagnant (genre "bravo vous gagnez cette image de PS5")
-    - Permettre d'invalider la question
+# Kanban
+https://github.com/users/gus3000/projects/2
 # Lancer le projet en local
 
 pré-requis : avoir Docker installé et configuré pour l'utilisateur courant.

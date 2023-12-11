@@ -1,36 +1,86 @@
 <script setup lang="ts">
-import {PropType} from "vue";
-import {TPlayerStats, TStats} from "@/Model/TStats";
+import {computed, PropType, ref} from "vue";
+import {TPlayerStats, TStats, TStatsType} from "@/Model/TStats";
 import Text from "@/Components/Text.vue";
-import Table from "@/Components/Table.vue";
 import {usePage} from "@inertiajs/vue3";
+import {compute} from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements";
+import QuizStatsRow from "@/Components/QuizStatsRow.vue";
+
+const SHOW_TOP_N_PLAYERS = 5;
 
 const page = usePage();
 
-function textColor(stat: TPlayerStats) {
-  return [
-    stat.name === page.props.auth.user.name ? 'font-bold dark:text-blue-400' : 'text-slate-200'
-  ]
-}
-
 const props = defineProps({
-  stats: Object as PropType<TStats>,
+  stats: {
+    type: Object as PropType<TStats>,
+    required: true
+  },
 });
+
+const playerRank = computed(() => {
+  const name = page.props.auth.user.name;
+  for (let [rank, playerStat] of props.stats?.players?.entries() ?? []) {
+    if (playerStat.name === name)
+      return rank;
+  }
+  return -1;
+});
+
+const playerStats = computed<TPlayerStats>(() => {
+  const name = page.props.auth.user.name;
+  for (let [rank, playerStat] of props.stats?.players?.entries() ?? []) {
+    if (playerStat.name === name)
+      return playerStat;
+  }
+  return -1;
+})
+
+const showAllStats = ref(false);
+
 
 </script>
 
 <template>
   <div class="flex justify-center">
-    <div class="w-1/2 rounded-xl bg-slate-50 dark:bg-slate-900">
-      <div class="container my-4">
-        <div class="name header">Nom</div>
-        <div class="score header">Score</div>
-        <div class="goodAnswers header">Bonnes réponses</div>
-        <template v-for="stat in stats?.players">
-          <div class="content name" :class="textColor(stat)">{{ stat.name }}</div>
-          <Text class="content score" :class="textColor(stat)">{{ stat.score }}</Text>
-          <Text class="content goodAnswers" :class="textColor(stat)">{{ stat.goodAnswers }}</Text>
+    <div class="w-full rounded-xl bg-slate-50 dark:bg-slate-900">
+      <Text class="text-center">Score {{ stats?.statsType === TStatsType.Quiz ? 'quiz' : 'question' }}
+      </Text>
+      <div class="container my-4" :class="[stats?.statsType === TStatsType.Quiz ? 'quiz' : 'question']">
+        <QuizStatsRow :stats-type="stats?.statsType"
+                      header
+                      rank="Rang"
+                      name="Nom"
+                      score="Score"
+                      good-answers="Bonnes réponses"
+        />
+        <template v-for="(stat,index) in showAllStats ? stats.players : stats?.players.slice(0,SHOW_TOP_N_PLAYERS)">
+          <QuizStatsRow :stats-type="stats?.statsType"
+                        :rank="index+1"
+                        :name="stat.name"
+                        :score="stat.score"
+                        :good-answers="stat.goodAnswers"
+                        :user="stat.name === page.props.auth.user.name"
+          />
         </template>
+        <QuizStatsRow v-if="playerRank > SHOW_TOP_N_PLAYERS && !showAllStats" :stats-type="stats.statsType" @click="() => {showAllStats = true;}" />
+
+        <QuizStatsRow v-if="playerRank >= SHOW_TOP_N_PLAYERS && !showAllStats"
+                      :stats-type="stats.statsType"
+                      :rank="playerRank+1"
+                      :name="playerStats.name"
+                      :score="playerStats.score"
+                      :good-answers="playerStats.goodAnswers"
+                      :user="true"
+        />
+        <template  v-if="playerRank < stats.players.length -1 && !showAllStats">
+          <QuizStatsRow :stats-type="stats.statsType" @click="() => {showAllStats = true;}"/>
+        </template>
+<!--        <template v-else-if="playerRank < stats.players.length">-->
+<!--          <QuizStatsRow :stats-type="stats.statsType"-->
+<!--            rank="bla"/>-->
+<!--        </template>-->
+
+
       </div>
     </div>
   </div>
@@ -39,26 +89,14 @@ const props = defineProps({
 <style scoped>
 .container {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
   grid-auto-flow: row;
 }
 
-.content {
-  @apply dark:bg-slate-800 m-0 p-2 border-b border-slate-400 dark:border-slate-700;
+.container.quiz {
+  grid-template-columns: 0.5fr 2fr 1fr 1fr;
 }
 
-.header {
-  @apply font-bold text-slate-400 dark:text-slate-200 p-4;
+.container.question {
+  grid-template-columns: 0.5fr 2fr 1fr;
 }
-
-.name {
-  /*@apply dark:bg-slate-800;*/
-}
-
-.score {
-}
-
-.goodAnswers {
-}
-
 </style>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\NextQuestion;
+use App\Models\Enum\PlayerStatsType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -165,7 +166,8 @@ class Quiz extends Model
             if(is_null($question->opened_at))
                 continue;
             $questionStats = $question->stats;
-            foreach($questionStats as $name => $stat) {
+            foreach($questionStats['players'] as $stat) {
+                $name = $stat['name'];
                 if(!key_exists($name, $playerStats)) {
                     $playerStats[$name] = [
                         'name' => $name,
@@ -185,18 +187,7 @@ class Quiz extends Model
 
         return [
             'players' => $playerStats,
-//            'players' => [
-//                [
-//                    'name' => 'castless',
-//                    'score' => 1324,
-//                    'goodAnswers' => 2,
-//                ],
-//                [
-//                    'name' => 'jeanmichel',
-//                    'score' => 81234,
-//                    'goodAnswers' => 17,
-//                ]
-//            ]
+            'statsType' => 0    ,
         ];
     }
 }
