@@ -19,11 +19,17 @@ composer.phar:
 
 prod-build: composer.phar
 	$(DOCKER_PROD_COMPOSER) install
+	$(DOCKER_PROD) run --rm npm install
 	$(DOCKER_PROD) run --rm npm run build-nocheck
 
+migrations:
+	$(DOCKER_PROD_PHP) php artisan migrate
+
 fix-permissions:
-	sudo chown -R gus3000:gus3000 .
-	chmod 755 storage/framework/sessions
-	chmod 644 storage/framework/sessions/*
+	sudo chown -R $$(id -u):$$(id -g) .
+	chmod -R g+w storage/logs
+	chmod -R g+w storage/framework
+	#chmod 755 storage/framework/sessions
+	#chmod 644 storage/framework/sessions/* || echo "no sessions, skipping..."
 
 #TODO find a way to make `artisan short-schedule:run` work
