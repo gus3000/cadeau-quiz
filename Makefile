@@ -3,7 +3,7 @@ DOCKER_PROD_PHP = $(DOCKER_PROD) exec php
 DOCKER_PROD_ARTISAN = $(DOCKER_PROD_PHP) php artisan
 DOCKER_PROD_COMPOSER = $(DOCKER_PROD) run --rm php php composer.phar
 
-deploy: prod-build prod-up fix-permissions
+deploy: prod-up prod-build fix-permissions
 
 prod-up:
 	$(DOCKER_PROD) up php nginx mysql --build -d

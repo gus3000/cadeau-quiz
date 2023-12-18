@@ -37,8 +37,7 @@ services:
 
   php:
     build:
-      context: .
-      dockerfile: docker/prod/php/Dockerfile
+      context: ./docker/prod/php
     container_name: php
     user: "${USER_ID}:${GROUP_ID}"
     volumes:

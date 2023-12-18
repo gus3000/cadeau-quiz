@@ -62,7 +62,7 @@ Route::get('/', function () {
     $guess?->load('answer.question');
 
     $quizStats = $quiz->stats;
-    $questionStats = $question->stats;
+    $questionStats = $question?->stats;
 
     return Inertia::render('Quiz', [
         'quiz' => $quiz,
