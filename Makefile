@@ -3,7 +3,7 @@ DOCKER_PROD_PHP = $(DOCKER_PROD) exec php
 DOCKER_PROD_ARTISAN = $(DOCKER_PROD_PHP) php artisan
 DOCKER_PROD_COMPOSER = $(DOCKER_PROD) run --rm php php composer.phar
 
-deploy: prod-up prod-build fix-permissions
+deploy: prod-up prod-build fix-permissions renew-ssl
 
 prod-up:
 	$(DOCKER_PROD) up php nginx mysql --build -d
@@ -32,4 +32,7 @@ fix-permissions:
 	#chmod 755 storage/framework/sessions
 	#chmod 644 storage/framework/sessions/* || echo "no sessions, skipping..."
 
+renew-ssl:
+	$(DOCKER_PROD) run --rm certbot renew
+	$(DOCKER_PROD) restart nginx
 #TODO find a way to make `artisan short-schedule:run` work
