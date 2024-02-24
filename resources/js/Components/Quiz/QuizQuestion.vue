@@ -104,6 +104,7 @@ watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
                 @update-score="updateScore"
             />
         </Transition>
+        <!--        <Gift/>-->
     </div>
 </template>
 

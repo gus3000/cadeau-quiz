@@ -30,9 +30,11 @@ docker run --rm \
 5) Lancer les conteneurs dockers du projet. Quelques configurations sont personnalisées, donc on doit build les conteneurs :
 ```bash
 vendor/bin/sail up -d --build
+sail artisan websocket:serve
+sail artisan short-schedule:run
 ```
 
 6) Lancer le build du front Vue :
 ```bash
-
+ sail npm run dev
 ```
