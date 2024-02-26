@@ -27,7 +27,7 @@ class TwitchController extends Controller
             return [];
 
         $question = $quiz->current_question;
-        $question?->load('answers');
+        $question?->load(['answers','media']);
 
         $question?->makeHiddenIf(!$question->closed, 'correct_answer');
 

@@ -50,7 +50,7 @@ class QuestionApiController extends Controller
             ]);
         }
 
-        $question->load('answers');
+            $question->load(['answers', 'media']);
 
         $question->answers->each(function(Answer $answer) {
             $answer->makeVisible('correct');

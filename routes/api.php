@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\QuizApiController;
 use App\Http\Controllers\Api\TwitchApiController;
 use App\Http\Controllers\GuessController;
 use App\Models\Guess;
+use App\Models\Media;
 use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
@@ -77,6 +78,22 @@ Route::prefix('question')->group(function () {
             abort(401, 'La question est encore ouverte, vous ne pouvez pas récuperer les réponses');
         return Guess::whereQuestionId($question->id);
     });
+
+    Route::post('/{question}/media', function (Request $request, Question $question) {
+        $existing = $question->media;
+        if ($existing) {
+            $existing->delete();
+        }
+        $path = Storage::disk('media')->putFile('', $request->file('media'));
+        $mediaType = 1; //images only for now
+        $media = Media::create([
+            'question_id' => $question->id,
+            'media_type_id' => $mediaType,
+            'path' => $path,
+        ]);
+
+        return ['file' => $media->file];
+    })->name('questions.media');
 });
 
 Route::prefix('twitch')

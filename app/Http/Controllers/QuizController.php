@@ -81,7 +81,7 @@ class QuizController extends Controller
         if (!$user->admin && !$user->id === $quiz->created_by)
             abort(403, "Vous n'êtes pas autorisé à visualiser ce quiz");
 
-        $quiz->load('questions.answers');
+        $quiz->load(['questions.answers', 'questions.media']);
 
         return Inertia::render('Dashboard/QuizView', [
             'quiz' => $quiz
@@ -93,7 +93,7 @@ class QuizController extends Controller
      */
     public function edit(Quiz $quiz)
     {
-        $quiz->load('questions.answers');
+        $quiz->load(['questions.answers', 'questions.media']);
         $quiz->questions->each(function (Question $question) {
             $question->answers->each(function (Answer $answer) {
                 $answer->makeVisible('correct');
@@ -111,7 +111,7 @@ class QuizController extends Controller
     public function update(UpdateQuizRequest $request, Quiz $quiz)
     {
         $this->quizUpdateService->updateQuiz($quiz, $request->all());
-        return $quiz->load('questions.answers');
+        return $quiz->load(['questions.answers', 'questions.media']);
     }
 
     /**

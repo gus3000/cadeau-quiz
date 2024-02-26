@@ -50,7 +50,7 @@ Route::get('/', function () {
         return redirect('dashboard');
 
     $question = $quiz->current_question;
-    $question?->load('answers');
+    $question?->load(['answers', 'media']);
 
     $question?->makeHiddenIf(!$question->closed, 'correct_answer');
 
@@ -98,5 +98,12 @@ Route::middleware(['auth'])
         });
     });
 
+Route::get('temp/image/{path}', function (string $path) {
+    if (!\request()->hasValidSignature()) {
+        abort(401);
+    }
+
+    return Storage::disk('media')->download($path);
+})->name('media.temp');
 
 require __DIR__ . '/auth.php';

@@ -5,7 +5,6 @@ import type {TAnswer} from "@/Model/TAnswer";
 import axios from "axios";
 import Countdown from "@/Components/Quiz/VanillaCountdown.vue";
 import type {TGuess} from "@/Model/TGuess";
-import SnapCountdown from "@/Components/Quiz/SnapCountdown.vue";
 
 const selectedAnswer = ref<TAnswer | null>(null);
 const score = ref<number>(0);
@@ -76,6 +75,9 @@ watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
         <p class="text-2xl font-bold my-1">{{ question?.text ?? "Le quiz va bientôt commencer !" }}</p>
         <!--        <div v-if="questionFinished">Question terminée !</div>-->
         <div v-if="question" class="text-xl" :class="[overlay ? 'hidden' : '']">Question {{ question.order }}</div>
+        <div v-if="question.media" class="flex flex-row items-center justify-around m-10">
+            <img class="rounded-lg" :src="question.media.file" alt="aperçu question"/>
+        </div>
         <ul class="grid grid-cols-2 place-items-stretch gap-2">
             <li v-for="answer in question?.answers"
                 class="flex flex-1 w-full justify-center items-center"
@@ -98,7 +100,7 @@ watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
                 </label>
             </li>
         </ul>
-<!--        <SnapCountdown/>-->
+        <!--        <SnapCountdown/>-->
         <Transition name="bounce">
             <Countdown
                 v-if="!questionFinished"
