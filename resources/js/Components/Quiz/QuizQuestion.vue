@@ -3,8 +3,9 @@ import {type PropType, ref, watch} from "vue";
 import type {TQuestion} from "@/Model/TQuestion";
 import type {TAnswer} from "@/Model/TAnswer";
 import axios from "axios";
-import Countdown from "@/Components/Quiz/Countdown.vue";
+import Countdown from "@/Components/Quiz/VanillaCountdown.vue";
 import type {TGuess} from "@/Model/TGuess";
+import SnapCountdown from "@/Components/Quiz/SnapCountdown.vue";
 
 const selectedAnswer = ref<TAnswer | null>(null);
 const score = ref<number>(0);
@@ -97,6 +98,7 @@ watch(() => props.question?.correct_answer, (newCorrect, oldCorrect) => {
                 </label>
             </li>
         </ul>
+<!--        <SnapCountdown/>-->
         <Transition name="bounce">
             <Countdown
                 v-if="!questionFinished"

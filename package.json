@@ -42,6 +42,8 @@
         "flowbite-vue-icons": "^0.5",
         "jquery": "^3.7.1",
         "jwt-decode": "^4.0.0",
+        "snapsvg": "^0.5.1",
+        "snapsvg-cjs": "^0.0.6",
         "three": "^0.134.0",
         "troisjs": "^0.3.4",
         "uuid": "^9.0.1",

@@ -3,7 +3,6 @@ import {computed, PropType, ref} from "vue";
 import {TPlayerStats, TStats, TStatsType} from "@/Model/TStats";
 import Text from "@/Components/Text.vue";
 import {usePage} from "@inertiajs/vue3";
-import {compute} from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements";
 import QuizStatsRow from "@/Components/QuizStatsRow.vue";
 
 const SHOW_TOP_N_PLAYERS = 5;
