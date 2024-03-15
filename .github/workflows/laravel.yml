@@ -59,8 +59,7 @@ jobs:
           TARGET: ${{ secrets.REMOTE_TARGET }}
           EXCLUDE: ".env"
           SCRIPT_BEFORE: |
-            whoami
-            ls -al
+            sudo apt install make rsync
           SCRIPT_AFTER: |
             pwd
             cd ${{ secrets.REMOTE_TARGET }}

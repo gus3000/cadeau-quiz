@@ -3,7 +3,7 @@ DOCKER_PROD_PHP = $(DOCKER_PROD) exec php
 DOCKER_PROD_ARTISAN = $(DOCKER_PROD_PHP) php artisan
 DOCKER_PROD_COMPOSER = $(DOCKER_PROD) run --rm php php composer.phar
 
-deploy: prod-up prod-build fix-permissions renew-ssl
+deploy: prod-up prod-build fix-permissions # renew-ssl
 
 prod-up:
 	$(DOCKER_PROD) up php nginx mysql --build -d
@@ -18,7 +18,7 @@ composer.phar:
 	$(DOCKER_PROD) run --rm php sh docker/download_composer.sh
 
 prod-build: composer.phar
-	$(DOCKER_PROD_COMPOSER) install
+	$(DOCKER_PROD_COMPOSER) install --optimize-autoloader --no-dev
 	$(DOCKER_PROD) run --rm npm install
 	$(DOCKER_PROD) run --rm npm run build-nocheck
 
