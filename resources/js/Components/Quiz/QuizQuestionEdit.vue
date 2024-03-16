@@ -7,6 +7,7 @@ import {AngleDownIcon, AngleUpIcon, TrashBinIcon} from "flowbite-vue-icons";
 import IconButton from "@/Components/Button/IconButton.vue";
 import FileInput from "@/Components/Input/FileInput.vue";
 import {onMounted, ref} from "vue";
+import axios from "axios";
 
 
 const props = defineProps<{
@@ -37,6 +38,12 @@ function changeFile(fileInput): void {
         console.log("reloading image");
         preview.value = response.data.file;
     });
+}
+
+function deleteAnswer(answer: TAnswer): void {
+    const i = props.question.answers.indexOf(answer);
+    props.question.answers.splice(i, 1);
+    axios.delete(route('answers.destroy', answer as any));
 }
 
 onMounted(() => {
@@ -73,6 +80,7 @@ onMounted(() => {
         <FileInput label="Charger une image" accept="image/png, image/jpeg" :onchange="changeFile" :preview="preview"/>
         <QuizAnswerEdit v-for="answer in [...correctAnswers(), ...incorrectAnswers()]"
                         :answer="answer"
+                        @delete="deleteAnswer"
         />
     </div>
 </template>

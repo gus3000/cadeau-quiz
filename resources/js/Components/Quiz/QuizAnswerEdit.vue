@@ -3,6 +3,8 @@
 import type {TAnswer} from "@/Model/TAnswer";
 import {computed} from "vue";
 import FloatingLabeledTextInput from "@/Components/Input/FloatingLabeledTextInput.vue";
+import {TrashBinIcon} from "flowbite-vue-icons";
+import IconButton from "@/Components/Button/IconButton.vue";
 
 const props = defineProps<{
   answer: TAnswer
@@ -29,6 +31,10 @@ const labelColor = computed(() => {
         v-model="answer.text"
         class="w-full"
         error=""/>
+      <IconButton :icon-name="TrashBinIcon"
+                  :solid="false"
+                  @click="$emit('delete', answer)"
+      />
   </div>
 </template>
 

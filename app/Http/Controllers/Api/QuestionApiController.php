@@ -7,6 +7,7 @@ use App\Models\Answer;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Nette\NotImplementedException;
 
 class QuestionApiController extends Controller
 {
@@ -36,17 +37,13 @@ class QuestionApiController extends Controller
             'text' => $request->get('text') ?? '',
         ]);
 
-        Answer::create([
-            'question_id' => $question->id,
-            'order' => 1,
-            'correct' => true,
-        ]);
 
-        for ($i = 2; $i <= $question->quiz->default_number_of_answers; $i++) {
+
+        for ($i = 1; $i <= $question->quiz->default_number_of_answers; $i++) {
             Answer::create([
                 'question_id' => $question->id,
                 'order' => $i,
-                'correct' => false,
+                'correct' => ($i === 1),
             ]);
         }
 
@@ -75,7 +72,7 @@ class QuestionApiController extends Controller
      */
     public function update(Request $request, Question $question)
     {
-        //
+        throw new NotImplementedException(); //TODO
     }
 
     /**

@@ -1,9 +1,11 @@
 <?php
 
 use App\Events\ShowStats;
+use App\Http\Controllers\Api\AnswerApiController;
 use App\Http\Controllers\Api\QuestionApiController;
 use App\Http\Controllers\Api\QuizApiController;
 use App\Http\Controllers\Api\TwitchApiController;
+use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\GuessController;
 use App\Models\Guess;
 use App\Models\Media;
@@ -43,6 +45,8 @@ Route::prefix('quiz')->group(function () {
     Route::middleware(['web', 'auth:sanctum', 'quiz_owner'])->group(function () {
 
         Route::post('/{quiz}/lock', [QuizApiController::class, 'lock'])->name("api.quizzes.lock");
+        Route::get('/{quiz}/allowed-users', [QuizApiController::class, 'getAllowedUsers'])->name('api.quizzes.allowed-users');
+        Route::put('/{quiz}/allowed-users', [QuizApiController::class, 'setAllowedUsers'])->name('api.quizzes.allowed-users');
 
         Route::middleware('admin')->group(function () {
             Route::get('/{quiz}/open', function (Quiz $quiz) {
@@ -67,6 +71,7 @@ Route::prefix('quiz')->group(function () {
 });
 
 Route::resource('questions', QuestionApiController::class);
+Route::resource('answers', AnswerApiController::class);
 
 Route::prefix('question')->group(function () {
     Route::get('/{question}/quiz', function (Question $question) {
@@ -101,6 +106,8 @@ Route::prefix('twitch')
         Route::get('/validate', [TwitchApiController::class, 'validateToken']);
         Route::get('/test-user', [TwitchApiController::class, 'testUser']);
     });
+
+Route::resource('users', UserApiController::class);
 
 Route::prefix('user')
     ->group(function () {

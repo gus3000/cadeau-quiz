@@ -18,6 +18,8 @@ import Modal from "@/Components/Modal.vue";
 import {router} from "@inertiajs/vue3";
 import Text from "@/Components/Text.vue";
 import LabelButton from "@/Components/Button/LabelButton.vue";
+import LabeledToggleInput from "@/Components/Input/LabeledToggleInput.vue";
+import LabeledUserSearchInput from "@/Components/Input/UserSearch/LabeledUserSearchInput.vue";
 
 
 const props = defineProps<{
@@ -190,6 +192,14 @@ onMounted(() => {
                     name="quiz.default_number_of_answers"
                     :error="errors.default_number_of_answers"
                     label="Nombre de réponses par défaut"/>
+                <LabeledToggleInput
+                    v-model="quiz.restricted_to_allowed_users"
+                    label="Utilisateurs autorisés uniquement"
+                />
+                <LabeledUserSearchInput
+                    v-if="quiz.restricted_to_allowed_users"
+                    :quiz="quiz"
+                    label="Utilisateurs autorisés"/>
                 <input type="hidden" v-model="quiz.updated_at"/>
             </div>
 

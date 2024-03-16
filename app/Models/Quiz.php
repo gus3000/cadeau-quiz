@@ -7,6 +7,7 @@ use App\Models\Enum\PlayerStatsType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -24,9 +25,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $logo_url
  * @property int $default_duration
  * @property int $default_number_of_answers
+ * @property int $restricted_to_allowed_users
  * @property int $locked
  * @property int $finished
  * @property int $closed
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $allowedUsers
+ * @property-read int|null $allowed_users_count
  * @property \App\Models\Question|null $current_question
  * @property-read bool $is_open
  * @property-read array $stats
@@ -50,6 +54,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereLogoUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereOpenedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereRestrictedToAllowedUsers($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereShortName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Quiz withTrashed()
@@ -66,7 +71,8 @@ class Quiz extends Model
         'short_name',
         'logo_url',
         'default_duration',
-        'default_number_of_answers'
+        'default_number_of_answers',
+        'restricted_to_allowed_users',
     ];
 
 
@@ -189,5 +195,10 @@ class Quiz extends Model
             'players' => $playerStats,
             'statsType' => 0    ,
         ];
+    }
+
+    public function allowedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'quiz_allowed_users');
     }
 }

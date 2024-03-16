@@ -12,6 +12,7 @@ export interface TQuiz {
     logo_url: string,
     default_duration: number,
     default_number_of_answers: number,
+    restricted_to_allowed_users: boolean,
     locked: boolean,
     finished: boolean,
     questions: TQuestion[],
